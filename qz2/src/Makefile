@@ -17,4 +17,7 @@ test : $(TARGETS)
 clean :
 	rm -rf $(TARGETS) *.o *~
 
-$(TARGETS)	: histogram.o
+$(TARGETS)	: histogram.o hiutil.o
+
+histogram.o	: histogram.h
+hiutil.o	: hiutil.h

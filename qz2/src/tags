@@ -1,0 +1,32 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BITS	histogram.h	4;"	d
+CFLAGS	Makefile	/^CFLAGS 	= $(shell pkg-config opencv --cflags) -Wall$/;"	m
+CPPFLAGS	Makefile	/^CPPFLAGS 	= $(shell pkg-config opencv --cflags) -Wall$/;"	m
+DEPS	histogram.h	5;"	d
+HDIM	jh.c	5;"	d	file:
+HDIM	test/jh.c	4;"	d	file:
+HISTOGRAM_H	histogram.h	2;"	d
+HIUTIL_H	hiutil.h	2;"	d
+IMG	te.c	/^const char *IMG     = "Ce";$/;"	v
+LDFLAGS	Makefile	/^LDFLAGS = $(shell pkg-config opencv --libs)$/;"	m
+TARGETS	Makefile	/^TARGETS = color_transfer te jh$/;"	m
+drawLine	histogram.c	/^void drawLine(IplImage *sa,CvScalar color,uchar *s)$/;"	f
+dstA	color_transfer.c	/^const char *dstA	= "Dest ADF";$/;"	v
+dstP	color_transfer.c	/^const char *dstP	= "Dest	Pic";$/;"	v
+fin	hiutil.c	/^void fin(const char *name,IplImage **img)$/;"	f
+getADFArray	histogram.c	/^uchar *getADFArray(IplImage *img)$/;"	f
+main	color_transfer.c	/^int main(int argc, char** argv){$/;"	f
+main	jh.c	/^int main( int argc, char** argv ) $/;"	f
+main	te.c	/^int main()$/;"	f
+main	test/jh.c	/^int main( int argc, char** argv ) $/;"	f
+main	test/te.cpp	/^int main( int argc, char** argv )$/;"	f
+makeGrayHistogramADFImage	histogram.c	/^IplImage *makeGrayHistogramADFImage(uchar *s)$/;"	f
+makeRGBHistogramADFImage	histogram.c	/^IplImage *makeRGBHistogramADFImage(uchar *r,uchar *g,uchar *b)$/;"	f
+show	hiutil.c	/^void show(const char *name,IplImage *img)$/;"	f
+srcA	color_transfer.c	/^const char *srcA	= "Source ADF";$/;"	v
+srcP	color_transfer.c	/^const char *srcP	= "Source Pic";$/;"	v

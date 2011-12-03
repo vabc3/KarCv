@@ -4,14 +4,16 @@
 const char *IMG     = "Ce";
 
 int main()
-{	uchar s[DEPS],i;
+{	float s[DEPS];
+	int i;
 	IplImage *a;
 
 	for(i=0;i<DEPS;i++){
-		s[i]=i;
+		s[i]=(1.0*i/DEPS);
+		s[i]*=s[i]*s[i];
 		if(i==DEPS-1)break;
 	}
-	a=makeGrayHistogramADFImage(s);
+	a=makeGrayHistogramImage(s);
 	cvNamedWindow(IMG, 1 );
 	cvShowImage(IMG,a);
 	cvWaitKey(0);
