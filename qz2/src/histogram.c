@@ -2,7 +2,48 @@
 
 static void drawLine(IplImage *sa,CvScalar color,float *s);
 
-IplImage *makeRGBHistogramADFImage(uchar *r,uchar *g,uchar *b)
+void merge(IplImage *dst,IplImage **rgb)
+{
+
+	cvMerge(*(rgb+2),*(rgb+1),*(rgb+0),0,dst);
+}
+
+void transfers(IplImage **src,IplImage **dst,uchar (*tfs)[DEPS])
+{
+	int i;
+	for(i=0;i<3;i++)
+		*(dst+i)	= transfer(*(src+i),*(tfs+i));
+
+}
+
+void split(IplImage *src,IplImage **rgb)
+{
+	*rgb = cvCreateImage( cvGetSize(src), 8, 1);
+	*(rgb+1) = cvCreateImage( cvGetSize(src), 8, 1);
+	*(rgb+2) = cvCreateImage( cvGetSize(src), 8, 1);
+	cvCvtPixToPlane(src,*(rgb+2),*(rgb+1),*rgb,0);
+}
+
+void makeHistogramArrays(IplImage **rgb,float (*ar)[DEPS])
+{
+	float r[DEPS];
+	makeHistogramArray(*rgb,r,*(ar));
+    makeHistogramArray(*(rgb+1),r,*(ar+1));
+	makeHistogramArray(*(rgb+2),r,*(ar+2));
+}
+
+IplImage *makeHistogramImage(int dims,float (*ar)[DEPS])
+{
+	//	printf("%d %d\n",*ar,*(ar+1));	
+	IplImage *sa = cvCreateImage(cvSize(DEPS,YSCALE),BITS,3);
+	cvZero(sa);
+	drawLine(sa,CV_RGB(255,0,0),*(ar));
+	drawLine(sa,CV_RGB(0,255,0),*(ar+1));
+	drawLine(sa,CV_RGB(0,0,255),*(ar+2));
+	return sa;
+}
+
+IplImage *makeRGBHistogramADFImage(float *r,float *g,float *b)
 {
 	IplImage *sa = cvCreateImage(cvSize(DEPS,DEPS),BITS,3);
 	cvZero(sa);
@@ -41,11 +82,10 @@ void drawLine(IplImage *sa,CvScalar color,float *s)
 void makeHistogramArray(IplImage *img,float *ar,float *adf)
 {
 	int i,hist_size = DEPS;
-
 	CvHistogram* hist = cvCreateHist(1,&hist_size,CV_HIST_ARRAY,0,1);
 	cvCalcHist(&img,hist,0,0);
 	cvNormalizeHist(hist,1.0);
-	
+
 	*(ar)=*(adf)=cvQueryHistValue_1D(hist,0);
 
 	for(i=1;i<hist_size;i++)

@@ -1,9 +1,9 @@
 #CV Homework #2
 #20111202
 
-CC		= clang
+#CC		= clang
 TARGETS = color_transfer te jh
-CFLAGS 	= $(shell pkg-config opencv --cflags) -Wall
+CFLAGS 	= $(shell pkg-config opencv --cflags) -Wall -O2
 CPPFLAGS 	= $(shell pkg-config opencv --cflags) -Wall
 LDFLAGS = $(shell pkg-config opencv --libs)
 

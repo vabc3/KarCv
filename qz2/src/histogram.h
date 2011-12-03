@@ -5,6 +5,13 @@
 #define DEPS (1<<BITS)
 #define YSCALE	255
 
+
+extern void split(IplImage *src,IplImage **rgb);
+extern void merge(IplImage *dst,IplImage **rgb);
+extern void transfers();
+extern void makeHistogramArrays();
+
+extern IplImage *makeHistogramImage();
 extern IplImage *makeRGBHistogramADFImage();
 extern IplImage *makeGrayHistogramImage(float *s);
 extern uchar *getADFArray() __attribute__((deprecated));

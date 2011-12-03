@@ -1,77 +1,91 @@
 #include <stdio.h>
-#include <highgui.h>
+#include "hiutil.h"
 #include "histogram.h"
 
 const char *srcP	= "Source Pic";
 const char *srcA	= "Source ADF";
+const char *studyP	= "StudyP";
+const char *studyA	= "Study";
 const char *dstP	= "Dest	Pic";
 const char *dstA	= "Dest ADF";
 
-void show(const char *name,IplImage *img)
-{
-	cvNamedWindow(name,1);
-	cvShowImage(name,img);
+void studys(uchar (*tfs)[DEPS],float (*f)[DEPS],float (*src)[DEPS]){
+	int i,j,k;
+
+	for(i=0;i<3;i++){
+		for(j=0;j<DEPS;j++){
+			for(k=0;k<DEPS;k++){
+				if(*(*(f+i)+k)>*(*(src+i)+j))
+					break;
+			}
+			*(*(tfs+i)+j)=k;
+		}
+	}
 }
 
-void fin(const char *name,IplImage **img)
-{
-	cvDestroyWindow(name);
-	cvReleaseImage(img);
+void maketfs(uchar (*tfs)[DEPS],float (*f)[DEPS]){
+	int i,j;
+	for(i=0;i<3;i++)
+		for(j=0;j<DEPS;j++){
+			*(*(tfs+i)+j)=*(*(f+i)+j)*255;
+	}
 }
 
+void maketf(uchar *tf,float *f){
+	int i;
+	for(i=0;i<DEPS;i++)
+		*(tf+i)=*(f+i)*255;
+}
 
 int main(int argc, char** argv){
-	IplImage *src,*dst,*srca,*dsta;
-	uchar *r,*g,*b;
-	src=cvLoadImage(*(argv+1),1);
-	IplImage* RedChannel = cvCreateImage( cvGetSize(src), 8, 1);
-	IplImage* GreenChannel = cvCreateImage( cvGetSize(src), 8, 1);
-	IplImage* BlueChannel = cvCreateImage( cvGetSize(src), 8, 1);
-	cvCvtPixToPlane(src,BlueChannel,GreenChannel,RedChannel,0);
-
-	r=getADFArray(RedChannel);
-	g=getADFArray(GreenChannel);
-	b=getADFArray(BlueChannel);
-
-	srca=makeRGBHistogramADFImage(r,g,b);
-
-	IplImage *nr,*ng,*nb;
-	nr=cvCloneImage(RedChannel);
-	ng=cvCloneImage(GreenChannel);
-	nb=cvCloneImage(BlueChannel);
+	IplImage *src,*dst,*srca,*dsta,*study,*studya;
+	IplImage *rgb[3],*nrgb[3];
+	uchar tfs[3][DEPS];
+	float m[3][DEPS],nm[3][DEPS],sm[3][DEPS];
 
 
+	if(argc!=3){
+			printf("%s <source> <study>\n",*argv);
+			return 1;
+	}
 
-	CvMat *T_mat;
-    T_mat = cvCreateMatHeader( 1, 256, CV_8UC1 );
-	cvSetData( T_mat, r, 256);
-	cvLUT(RedChannel,nr,T_mat);
+//读取源与学习图片
+	src		= cvLoadImage(*(argv+1),1);
+	study	= cvLoadImage(*(argv+2),1);
+
+	split(study,rgb);
+	makeHistogramArrays(rgb,sm);
+	studya	= makeHistogramImage(3,sm);
 
 
+	split(src,rgb);
+	makeHistogramArrays(rgb,m);
+	srca=makeHistogramImage(3,m);
 
-	cvSetData( T_mat, g, 256);
-	cvLUT(GreenChannel,ng,T_mat);
+	
+//	maketfs(tfs,m);
+	studys(tfs,sm,m);
 
-
-	cvSetData( T_mat, b, 256);
-	cvLUT(BlueChannel,nb,T_mat);
-
+	transfers(rgb,nrgb,tfs);
 	dst=cvCloneImage(src);
-	cvMerge(nr,GreenChannel,BlueChannel,0,dst);
-	
-	r=getADFArray(nr);
-	g=getADFArray(ng);
-	b=getADFArray(nb);
-	dsta=makeRGBHistogramADFImage(r,g,b);	
-	
+	merge(dst,nrgb);
+
+	makeHistogramArrays(nrgb,nm);
+	dsta=makeHistogramImage(3,nm);
+
+	cvSaveImage("save.jpg",dsta,0);
+
 	show(srcP,src);
 	show(srcA,srca);
+	show(studyA,studya);
+	show(studyP,study);
 	show(dstP,dst);
 	show(dstA,dsta);
 	cvWaitKey(0);
-
 	fin(srcP,&src);
 	fin(srcA,&srca);
+	fin(studyP,&study);
+	fin(studyA,&studya);
 	fin(dstP,&dst);
 	fin(dstA,&dsta);
 	return 0;
