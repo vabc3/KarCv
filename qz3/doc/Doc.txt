@@ -1,0 +1,34 @@
+Computer Vision 2011-B
+作业3 CvCanny检测
+21021191 刘东
+
+1.开发工具
+C Language.
+
+2.运行环境
+GNU/Linux kernel 3.1.0 x86_64
+opencv-2.3.1
+glibc-2.14.1
+gcc-4.6.2
+
+3.源程序
+src目录
+canny.cpp canny.h				基于opencv源文件修改的canny函数
+_geom.h precomp.hpp				canny.cpp需要的头文件
+hiutil.c hiutil.h				Gui的辅助库
+prog.c						主程序
+Makefile   					Makefile文件
+
+
+
+4.可执行程序
+prog	主程序
+
+5.截图列表
+01.jpg			原始图片1
+01_50-150.jpg	图片1（threshold = 50/150）
+01_auto.jpg		图片1( auto threshold = 11.545098/28.862745)
+02.jpg			原始图片2
+02_50-150.jpg	图片2( threshold = 50/150)
+02_auto.jpg		图片2( auto threshold = 13.816470/34.541176)
+
