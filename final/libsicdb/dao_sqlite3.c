@@ -109,16 +109,15 @@ int sic_sqlite3_query(const char *key,sic_dbitem **its,int *cou)
 	sqlite3_exec(db,buf,query_cb,its,NULL);
 	sic_log("共%d个结果",count);
 	*cou=count;
-
+	dbitems_print(its,*cou);
+/*
 	int i;
 	sic_dbitem *p;
 	for(i=0;i<count;i++){
 		p=*its+i;
-//		sic_log("%lu",p);
 		dbitem_print(p);
 	}
-
-
+*/
 	return 0;
 }
 

@@ -22,12 +22,22 @@
 #include "sicdbdao.h"
 #include "sicdbdao_sqlite3.h"
 
-void dbitem_print(const sic_dbitem *item)
+
+
+void dbitems_print(const sic_dbitem **items,const int count)
 {
-	sic_log("{[(%s-%s-%s)]}",item->imagefile,item->featurefile,item->description);
+	int i;
+	sic_log("---%d结果打印开始---",count);
+	for(i=0;i<count;i++){
+		dbitem_print(*items+i);
+	}
+	sic_log("---%d结果打印结束---",count);
 }
 
-
+void dbitem_print(const sic_dbitem *item)
+{
+	sic_log("|%s-%s-%s\t|",item->imagefile,item->featurefile,item->description);
+}
 
 inline int make_sic_dbitem(sic_dbitem *p,const char *imagefile,
 						const char *featurefile,const char * description)
