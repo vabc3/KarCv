@@ -37,7 +37,7 @@ struct sic_dbdao_s{
 
 typedef struct sic_dbdao_s sic_dbdao;
 
-extern inline sic_dbitem* make_sic_dbitem(const char *imagefile,
+extern inline int make_sic_dbitem(sic_dbitem **item,const char *imagefile,
 		const char *featurefile,const char * description);
 extern void dbitem_print(const sic_dbitem*);
 extern sic_dbdao* sic_dbdao_init(sic_dbtype dbtype,const char *arg);

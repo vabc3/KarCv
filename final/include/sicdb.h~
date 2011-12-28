@@ -19,7 +19,7 @@
 #ifndef SICDB_H
 #define SICDB_H
 
-#define STRMLEN	125
+#define STRMLEN	25
 
 /*-----------------------------------------------------------------------------
  * item struct definition 

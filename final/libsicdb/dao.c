@@ -29,10 +29,9 @@ void dbitem_print(const sic_dbitem *item)
 
 
 
-inline int make_sic_dbitem(sic_dbitem **item,const char *imagefile,
+inline int make_sic_dbitem(sic_dbitem *p,const char *imagefile,
 						const char *featurefile,const char * description)
 {
-	sic_dbitem *p=*item;
 	strcpy(p->imagefile,imagefile);	
 	strcpy(p->featurefile,featurefile);
 	strcpy(p->description,description);
@@ -66,6 +65,6 @@ sic_dbdao* sic_dbdao_init(sic_dbtype dbtype,const char *arg)
 void sic_dbdao_close(sic_dbdao *dao)
 {
 	dao->close();
-	free(dao);
+//	free(dao);
 }
 

@@ -84,22 +84,16 @@ int sic_sqlite3_insert(sic_dbitem* item)
 	return 0;
 }
 
-static int query_cb(void *a,int b, char **c,char **d)
+int query_cb(void *a,int b, char **c,char **d)
 {
 	sic_log("回调被呼叫 id=%s",*c);
-	sic_log("a=%lu",a);
 	count++;
 	sic_dbitem **q = a;
-//	int rs=count*sizeof(sic_dbitem*);
-//	sic_log("%d",rs);
-	*q=(sic_dbitem*)realloc(*q,count*sizeof(sic_dbitem*));
-//	*q=p;
-	sic_dbitem *qq=*q+count-1;
-	sic_log("%lu>%lu",*q,qq);
-//	*(*q+count-1)=p;
-//	make_sic_dbitem(&qq,*(c+1),*(c+2),*(c+3));
+	
+	*q=(sic_dbitem*)realloc(*q,count*sizeof(sic_dbitem));
+	make_sic_dbitem(*q+count-1,*(c+1),*(c+2),*(c+3));
 
-	dbitem_print((*q+count-1));
+//	dbitem_print((*q+count-1));
 	return 0;
 }
 
@@ -108,9 +102,10 @@ int sic_sqlite3_query(const char *key,sic_dbitem **its,int *cou)
 	char buf[512];
 	sic_log("查询[%s]",key);
 	sprintf(buf,DB_QUERY,key);
-	
-	sic_log("its=%lu",its);
-	*its=NULL;count=0;
+
+	*its=NULL;
+	count=0;
+
 	sqlite3_exec(db,buf,query_cb,its,NULL);
 	sic_log("共%d个结果",count);
 	*cou=count;
@@ -119,9 +114,11 @@ int sic_sqlite3_query(const char *key,sic_dbitem **its,int *cou)
 	sic_dbitem *p;
 	for(i=0;i<count;i++){
 		p=*its+i;
-		sic_log("%lu",p);
+//		sic_log("%lu",p);
 		dbitem_print(p);
 	}
+
+
 	return 0;
 }
 
