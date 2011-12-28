@@ -20,5 +20,6 @@
 extern int sic_sqlite3_open(const char *arg);
 extern int sic_sqlite3_close();
 extern int sic_sqlite3_insert(sic_dbitem* item);
-extern sic_dbitem* sic_sqlite3_query(int id);
+extern int sic_sqlite3_query(const char *key,sic_dbitem **its,int *count);
+extern int sic_sqlite3_clear();
 #endif

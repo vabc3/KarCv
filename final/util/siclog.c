@@ -17,7 +17,14 @@
  */
 #include <stdio.h>
 #include <stdarg.h>
-#include "siclog.h"
+
+static int debug=0;
+
+void debugon()
+{
+	debug=1;
+}
+
 
 void sic_log_f(const char *filename,const int line,const char *fmt,...)
 {

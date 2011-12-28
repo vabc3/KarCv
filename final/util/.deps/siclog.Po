@@ -6,7 +6,7 @@ siclog.o: siclog.c /usr/include/stdio.h /usr/include/features.h \
   /usr/include/_G_config.h /usr/include/wchar.h \
   /usr/bin/../lib/clang/3.0/include/stdarg.h \
   /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
-  /usr/include/bits/stdio.h ../include/siclog.h
+  /usr/include/bits/stdio.h
 
 /usr/include/stdio.h:
 
@@ -39,5 +39,3 @@ siclog.o: siclog.c /usr/include/stdio.h /usr/include/features.h \
 /usr/include/bits/sys_errlist.h:
 
 /usr/include/bits/stdio.h:
-
-../include/siclog.h:

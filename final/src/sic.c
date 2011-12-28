@@ -17,9 +17,9 @@
  */
 #include "siclog.h"
 //#include "sicdbdao.h"
-int debug=2;
 int main(){
+	debugon();
 	sic_log("---Main---");
-	sic_dbdao_init();
+//	sic_dbdao_init();
 	return 0;
 }

@@ -6,8 +6,16 @@ dao_sqlite3.o: dao_sqlite3.c /usr/include/stdio.h /usr/include/features.h \
   /usr/include/_G_config.h /usr/include/wchar.h \
   /usr/bin/../lib/clang/3.0/include/stdarg.h \
   /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
-  /usr/include/bits/stdio.h /usr/include/sqlite3.h ../include/siclog.h \
-  ../include/sicdb.h
+  /usr/include/bits/stdio.h /usr/include/stdlib.h \
+  /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+  /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/bits/byteswap.h /usr/include/sys/types.h \
+  /usr/include/time.h /usr/include/sys/select.h \
+  /usr/include/bits/select.h /usr/include/bits/sigset.h \
+  /usr/include/bits/time.h /usr/include/sys/sysmacros.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/alloca.h \
+  /usr/include/sqlite3.h ../include/siclog.h ../include/sicdb.h \
+  ../include/sicdbdao.h
 
 /usr/include/stdio.h:
 
@@ -41,8 +49,40 @@ dao_sqlite3.o: dao_sqlite3.c /usr/include/stdio.h /usr/include/features.h \
 
 /usr/include/bits/stdio.h:
 
+/usr/include/stdlib.h:
+
+/usr/include/bits/waitflags.h:
+
+/usr/include/bits/waitstatus.h:
+
+/usr/include/endian.h:
+
+/usr/include/bits/endian.h:
+
+/usr/include/bits/byteswap.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/time.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/bits/select.h:
+
+/usr/include/bits/sigset.h:
+
+/usr/include/bits/time.h:
+
+/usr/include/sys/sysmacros.h:
+
+/usr/include/bits/pthreadtypes.h:
+
+/usr/include/alloca.h:
+
 /usr/include/sqlite3.h:
 
 ../include/siclog.h:
 
 ../include/sicdb.h:
+
+../include/sicdbdao.h:

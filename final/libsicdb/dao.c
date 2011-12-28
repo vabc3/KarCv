@@ -17,9 +17,27 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "siclog.h"
 #include "sicdbdao.h"
 #include "sicdbdao_sqlite3.h"
+
+void dbitem_print(const sic_dbitem *item)
+{
+	sic_log("{[(%s-%s-%s)]}",item->imagefile,item->featurefile,item->description);
+}
+
+
+
+inline int make_sic_dbitem(sic_dbitem **item,const char *imagefile,
+						const char *featurefile,const char * description)
+{
+	sic_dbitem *p=*item;
+	strcpy(p->imagefile,imagefile);	
+	strcpy(p->featurefile,featurefile);
+	strcpy(p->description,description);
+	return 0;
+}
 
 sic_dbdao* sic_dbdao_init(sic_dbtype dbtype,const char *arg)
 {
@@ -32,6 +50,7 @@ sic_dbdao* sic_dbdao_init(sic_dbtype dbtype,const char *arg)
 		default:
 			dbdao->connect	= sic_sqlite3_open;
 			dbdao->close	= sic_sqlite3_close;
+			dbdao->clear	= sic_sqlite3_clear;
 			dbdao->insert	= sic_sqlite3_insert;
 			dbdao->query	= sic_sqlite3_query;
 	}
