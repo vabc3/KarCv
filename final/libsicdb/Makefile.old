@@ -1,0 +1,19 @@
+CC		= clang
+SRCS 	= $(wildcard *.c)
+OBJS 	= $(basename $(SRCS)).o
+CFLAGS 	= -Wall -I../include
+LDFLAGS	= 
+
+all : libsicdb.a
+
+libsicdb.a: $(OBJS)
+	ar rc $@ $(OBJS)
+	ranlib $@
+
+clean :
+	    rm -rf $(OBJS) *. *~ *.a
+
+test:
+		make -C test/
+
+.PHONY : all test clean

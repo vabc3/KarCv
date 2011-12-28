@@ -1,0 +1,14 @@
+CC		= clang
+TARGETS = tdb
+CFLAGS 	= -Wall -I../../include
+LDFLAGS	= -L.. -lsicdb
+.PHONY : all test clean
+
+all : $(TARGETS)
+
+$(TARGETS) : % : %.o
+	    $(CC) -o $@ $< $(LDFLAGS)
+
+clean :
+	    rm -rf $(TARGETS) *. *~ *.o
+

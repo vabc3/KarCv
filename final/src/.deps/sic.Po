@@ -1,0 +1,3 @@
+sic.o: sic.c ../include/siclog.h
+
+../include/siclog.h:

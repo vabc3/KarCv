@@ -1,0 +1,3 @@
+lib_LIBRARIES 	= libsicutil.a
+
+libsicdb_a_SOURCES = siclog.c
