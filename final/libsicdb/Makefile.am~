@@ -1,3 +1,0 @@
-lib_LIBRARIES 	= libsicdb.a
-
-libsicdb_a_SOURCES = sicdbdao.c sicdbdao_sqlite3.c
