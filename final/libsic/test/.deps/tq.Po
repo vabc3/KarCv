@@ -1,0 +1,5 @@
+tq.o: tq.c ../../include/sicmain.h ../../include/siclog.h
+
+../../include/sicmain.h:
+
+../../include/siclog.h:

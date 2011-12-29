@@ -31,7 +31,7 @@ struct sic_dbdao_s{
 	int (*connect)(const char *args);
 	int (*close)();
 	int (*clear)();
-	int (*insert)(sic_dbitem* item);
+	int (*insert)(const sic_dbitem* item);
 	int (*query)(const char *key,sic_dbitem **its,int *count);
 };
 

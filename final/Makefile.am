@@ -1,1 +1,2 @@
-SUBDIRS = util libsicdb src
+SUBDIRS = libsift libsic src
+CLEANFILES = *~

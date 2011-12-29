@@ -4069,7 +4069,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile libsicdb/Makefile libsicdb/test/Makefile util/Makefile src/Makefile"
+ac_config_files="$ac_config_files Makefile libsift/Makefile libsic/Makefile libsic/test/Makefile src/Makefile"
 
 #AC_SUBST(CFLAGS)
 CFLAGS="-O2 -Wall -g"
@@ -4805,9 +4805,9 @@ do
     "include/config.h") CONFIG_HEADERS="$CONFIG_HEADERS include/config.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "libsicdb/Makefile") CONFIG_FILES="$CONFIG_FILES libsicdb/Makefile" ;;
-    "libsicdb/test/Makefile") CONFIG_FILES="$CONFIG_FILES libsicdb/test/Makefile" ;;
-    "util/Makefile") CONFIG_FILES="$CONFIG_FILES util/Makefile" ;;
+    "libsift/Makefile") CONFIG_FILES="$CONFIG_FILES libsift/Makefile" ;;
+    "libsic/Makefile") CONFIG_FILES="$CONFIG_FILES libsic/Makefile" ;;
+    "libsic/test/Makefile") CONFIG_FILES="$CONFIG_FILES libsic/test/Makefile" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;

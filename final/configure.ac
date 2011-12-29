@@ -22,9 +22,9 @@ AC_CHECK_HEADERS([stdlib.h])
 AC_FUNC_MALLOC
 
 AC_CONFIG_FILES([Makefile
-                 libsicdb/Makefile
-                 libsicdb/test/Makefile
-				 util/Makefile
+				 libsift/Makefile
+                 libsic/Makefile
+                 libsic/test/Makefile
 				 src/Makefile
 				 ])
 #AC_SUBST(CFLAGS)

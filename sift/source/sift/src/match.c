@@ -86,7 +86,6 @@ int main( int argc, char** argv )
      
      is important for the RANSAC function to work.
   */
-  /*
   {
     CvMat* H;
     IplImage* xformed;
@@ -105,7 +104,6 @@ int main( int argc, char** argv )
 	cvReleaseMat( &H );
       }
   }
-  */
 
   cvReleaseImage( &stacked );
   cvReleaseImage( &img1 );

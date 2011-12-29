@@ -1,3 +1,3 @@
 AM_LDFLAGS		= -lsqlite3
-LDADD			= -L../libsicdb -lsicdb -L../util -lsicutil
+LDADD			= -L../libsic -lsic -L../libsift -lsift
 bin_PROGRAMS	= sic
