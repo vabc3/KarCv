@@ -15,36 +15,19 @@
  *
  * =====================================================================================
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include "sicutil.h"
+#include "func.h"
+#include "arg.h"
 #include "sicmain.h"
-#include "sicdb.h"
+#include "sicutil.h"
 
-static void status();
-
-int main(){
-	debugon();
-	sic_log("---Main---");
-	sic_init();
-	status();
-	sic_end();
-	return 0;
-}
-
-void status()
-{
-	sic_dbitem *its,*item;
-	int i,n;
+int main(int argc,char **argv){
+	debug();
+//	sic_init();
 	
-	if(sic_status(&its,&n))
-		return;
+	sic_opt *op;
+	op=parse_opt(argc,argv);
 
-	printf("现有%d条记录\n",n);
-	for(i=0;i<n;i++){
-		item = its+i;
-		printf("%s\t|%s\t|%s\t|\n",item->imagefile,item->featurefile,item->description);
-	}
+//	sic_end();
 
-	free(its);
+	return 0;
 }

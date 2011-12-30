@@ -17,6 +17,10 @@
  */
 #ifndef SICMAIN_H
 #define SICMAIN_H
+
+#define PACKAGENAME	"sic"
+#define SICVERSION "0.1"
+
 #include <sicdb.h>
 
 typedef struct sic_item_s{
@@ -24,6 +28,7 @@ typedef struct sic_item_s{
 		    float appo;
 } sic_item;
 
+void sic_getver(char *st);
 int sic_init();
 int sic_end();
 int sic_cleardb();

@@ -70,7 +70,7 @@ ARFLAGS = cru
 libsic_a_AR = $(AR) $(ARFLAGS)
 libsic_a_LIBADD =
 am_libsic_a_OBJECTS = dao.$(OBJEXT) dao_sqlite3.$(OBJEXT) \
-	main.$(OBJEXT) log.$(OBJEXT) feat.$(OBJEXT) file.$(OBJEXT)
+	sicmain.$(OBJEXT) log.$(OBJEXT) feat.$(OBJEXT) file.$(OBJEXT)
 libsic_a_OBJECTS = $(am_libsic_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -174,7 +174,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CFLAGS = `pkg-config --cflags opencv` -I../libsift
 lib_LIBRARIES = libsic.a
-libsic_a_SOURCES = dao.c dao_sqlite3.c main.c log.c feat.c file.c
+libsic_a_SOURCES = dao.c dao_sqlite3.c sicmain.c log.c feat.c file.c
 all: all-am
 
 .SUFFIXES:
@@ -257,7 +257,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/feat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/file.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/log.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sicmain.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

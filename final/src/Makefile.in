@@ -45,7 +45,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_sic_OBJECTS = sic.$(OBJEXT) arg.$(OBJEXT) func.$(OBJEXT)
+am_sic_OBJECTS = main.$(OBJEXT) arg.$(OBJEXT) func.$(OBJEXT)
 sic_OBJECTS = $(am_sic_OBJECTS)
 sic_LDADD = $(LDADD)
 sic_DEPENDENCIES =
@@ -152,7 +152,7 @@ top_srcdir = @top_srcdir@
 AM_CFLAGS = -I../libsic
 AM_LDFLAGS = `pkg-config --libs opencv sqlite3`
 LDADD = -L../libsic -lsic -L../libsift -lsift
-sic_SOURCES = sic.c arg.c func.c
+sic_SOURCES = main.c arg.c func.c
 all: all-am
 
 .SUFFIXES:
@@ -236,7 +236,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/arg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/func.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sic.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

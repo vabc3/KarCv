@@ -27,6 +27,11 @@
 static sic_dbdao* dao=NULL;
 static char fnbuf[255];
 
+void sic_getver(char *st)
+{
+	sprintf(st,"%s %s",PACKAGENAME,SICVERSION);
+}
+
 static void filename_gen(){
 	struct timeval tmv;
 	gettimeofday(&tmv,NULL);
@@ -36,6 +41,7 @@ static void filename_gen(){
 int sic_init()
 {
 	sic_log("Sic Init");
+	make_dir(".sic");
 	dao=sic_dbdao_init(SQLITE3,".sic/db");
 	if(!dao)
 		return -1;

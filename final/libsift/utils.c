@@ -16,6 +16,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <stdarg.h>
 
 /*************************** Function Definitions ****************************/
 

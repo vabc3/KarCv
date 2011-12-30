@@ -565,7 +565,7 @@ PACKAGE_STRING='SIC 0.1'
 PACKAGE_BUGREPORT='vabc3h@gmail.com'
 PACKAGE_URL=''
 
-ac_unique_file="src/sic.c"
+ac_unique_file="src/main.c"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
