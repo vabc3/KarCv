@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sqlite3.h>
-#include "siclog.h"
+#include "sicutil.h"
 #include "sicdb.h"
 #include "sicdbdao.h"
 

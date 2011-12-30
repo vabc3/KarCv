@@ -20,7 +20,7 @@
 #include <highgui.h>
 #include "sift.h"
 #include "kdtree.h"
-#include "siclog.h"
+#include "sicutil.h"
 #include "sicfeat.h"
 
 int intvls = SIFT_INTVLS;
@@ -31,7 +31,7 @@ int img_dbl = SIFT_IMG_DBL;
 int descr_width = SIFT_DESCR_WIDTH;
 int descr_hist_bins = SIFT_DESCR_HIST_BINS;
 
-int genfeature(char *imgfile,s_feature **feature,int *n)
+int genfeature(const char *imgfile,s_feature **feature,int *n)
 {
 	IplImage *img;
 
@@ -53,7 +53,7 @@ int genfeature(char *imgfile,s_feature **feature,int *n)
 
 s_feature *fe;
 
-int create_featurefile(char *imgfile,char *featurefile){
+int create_featurefile(const char *imgfile,const char *featurefile){
 	int n;
 	if(genfeature(imgfile,&fe,&n))
 		return -1;
@@ -81,7 +81,7 @@ int load_feature(char *featurefile,s_feature **feature,int *n)
 	return 0;
 }
 
-int save_feature(char *featurefile,s_feature *feature,int n)
+int save_feature(const char *featurefile,s_feature *feature,int n)
 {
 	sic_log("SaveFeatTo:%s",featurefile);
 	export_features(featurefile,feature,n);

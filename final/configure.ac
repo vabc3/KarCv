@@ -4,7 +4,7 @@
 AC_PREREQ([2.68])
 AC_INIT([SIC], [0.1], [vabc3h@gmail.com])
 AC_CONFIG_SRCDIR([src/sic.c])
-AC_CONFIG_HEADERS([include/config.h])
+AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE
 # Checks for programs.
 AC_PROG_CC

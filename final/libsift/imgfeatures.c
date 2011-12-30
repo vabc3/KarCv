@@ -12,12 +12,12 @@
 #include <cxcore.h>
 
 static int import_oxfd_features( char*, struct feature** );
-static int export_oxfd_features( char*, struct feature*, int );
+static int export_oxfd_features(const char*, struct feature*, int );
 static void draw_oxfd_features( IplImage*, struct feature*, int );
 static void draw_oxfd_feature( IplImage*, struct feature*, CvScalar );
 
 static int import_lowe_features( char*, struct feature** );
-static int export_lowe_features( char*, struct feature*, int );
+static int export_lowe_features(const char*, struct feature*, int );
 static void draw_lowe_features( IplImage*, struct feature*, int );
 static void draw_lowe_feature( IplImage*, struct feature*, CvScalar );
 
@@ -78,7 +78,7 @@ int import_features( char* filename, int type, struct feature** feat )
     
   @return Returns 0 on success or 1 on error
 */
-int export_features( char* filename, struct feature* feat, int n )
+int export_features(const char* filename, struct feature* feat, int n )
 {
   int r, type;
 
@@ -287,7 +287,7 @@ static int import_oxfd_features( char* filename, struct feature** features )
   
   @return Returns 0 on success or 1 on error
 */
-static int export_oxfd_features( char* filename, struct feature* feat, int n )
+static int export_oxfd_features(const char* filename, struct feature* feat, int n )
 {
   FILE* file;
   int i, j, d;
@@ -490,7 +490,7 @@ static int import_lowe_features( char* filename, struct feature** features )
   
   @return Returns 0 on success or 1 on error
 */
-static int export_lowe_features( char* filename, struct feature* feat, int n )
+static int export_lowe_features(const char* filename, struct feature* feat, int n )
 {
   FILE* file;
   int i, j, d;

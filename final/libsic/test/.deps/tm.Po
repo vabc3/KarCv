@@ -1,5 +1,8 @@
-tm.o: tm.c ../../include/sicmain.h ../../include/siclog.h
+tm.o: tm.c ../../include/sicmain.h ../../include/sicdb.h \
+  ../../include/sicutil.h
 
 ../../include/sicmain.h:
 
-../../include/siclog.h:
+../../include/sicdb.h:
+
+../../include/sicutil.h:

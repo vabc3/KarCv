@@ -32,7 +32,7 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = tdb$(EXEEXT) tbf$(EXEEXT) tm$(EXEEXT) tq$(EXEEXT)
+bin_PROGRAMS = ad$(EXEEXT) file$(EXEEXT)
 subdir = libsic/test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -40,27 +40,19 @@ am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/include/config.h
+CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-tbf_SOURCES = tbf.c
-tbf_OBJECTS = tbf.$(OBJEXT)
-tbf_LDADD = $(LDADD)
-tbf_DEPENDENCIES =
-tdb_SOURCES = tdb.c
-tdb_OBJECTS = tdb.$(OBJEXT)
-tdb_LDADD = $(LDADD)
-tdb_DEPENDENCIES =
-tm_SOURCES = tm.c
-tm_OBJECTS = tm.$(OBJEXT)
-tm_LDADD = $(LDADD)
-tq_SOURCES = tq.c
-tq_OBJECTS = tq.$(OBJEXT)
-tq_LDADD = $(LDADD)
-tq_DEPENDENCIES =
-DEFAULT_INCLUDES = -I. -I$(top_builddir)/include
+ad_SOURCES = ad.c
+ad_OBJECTS = ad.$(OBJEXT)
+ad_LDADD = $(LDADD)
+file_SOURCES = file.c
+file_OBJECTS = file.$(OBJEXT)
+file_LDADD = $(LDADD)
+file_DEPENDENCIES =
+DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
@@ -68,8 +60,8 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = tbf.c tdb.c tm.c tq.c
-DIST_SOURCES = tbf.c tdb.c tm.c tq.c
+SOURCES = ad.c file.c
+DIST_SOURCES = ad.c file.c
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -79,10 +71,10 @@ AUTOCONF = ${SHELL} /home/rquiss/prog/opencv/final/missing --run autoconf
 AUTOHEADER = ${SHELL} /home/rquiss/prog/opencv/final/missing --run autoheader
 AUTOMAKE = ${SHELL} /home/rquiss/prog/opencv/final/missing --run automake-1.11
 AWK = gawk
-CC = clang
+CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -O2 -Wall -g
-CPP = clang -E
+CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
@@ -122,7 +114,7 @@ abs_builddir = /home/rquiss/prog/opencv/final/libsic/test
 abs_srcdir = /home/rquiss/prog/opencv/final/libsic/test
 abs_top_builddir = /home/rquiss/prog/opencv/final
 abs_top_srcdir = /home/rquiss/prog/opencv/final
-ac_ct_CC = clang
+ac_ct_CC = gcc
 am__include = include
 am__leading_dot = .
 am__quote = 
@@ -163,7 +155,7 @@ top_srcdir = ../..
 AM_CFLAGS = `pkg-config --cflags opencv`
 AM_LDFLAGS = `pkg-config --libs sqlite3 opencv`
 LDADD = -L../ -lsic -L../../libsift -lsift
-tm_DEPENDENCIES = ../libsic.a
+ad_DEPENDENCIES = ../libsic.a
 all: all-am
 
 .SUFFIXES:
@@ -235,18 +227,12 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
-tbf$(EXEEXT): $(tbf_OBJECTS) $(tbf_DEPENDENCIES) 
-	@rm -f tbf$(EXEEXT)
-	$(LINK) $(tbf_OBJECTS) $(tbf_LDADD) $(LIBS)
-tdb$(EXEEXT): $(tdb_OBJECTS) $(tdb_DEPENDENCIES) 
-	@rm -f tdb$(EXEEXT)
-	$(LINK) $(tdb_OBJECTS) $(tdb_LDADD) $(LIBS)
-tm$(EXEEXT): $(tm_OBJECTS) $(tm_DEPENDENCIES) 
-	@rm -f tm$(EXEEXT)
-	$(LINK) $(tm_OBJECTS) $(tm_LDADD) $(LIBS)
-tq$(EXEEXT): $(tq_OBJECTS) $(tq_DEPENDENCIES) 
-	@rm -f tq$(EXEEXT)
-	$(LINK) $(tq_OBJECTS) $(tq_LDADD) $(LIBS)
+ad$(EXEEXT): $(ad_OBJECTS) $(ad_DEPENDENCIES) 
+	@rm -f ad$(EXEEXT)
+	$(LINK) $(ad_OBJECTS) $(ad_LDADD) $(LIBS)
+file$(EXEEXT): $(file_OBJECTS) $(file_DEPENDENCIES) 
+	@rm -f file$(EXEEXT)
+	$(LINK) $(file_OBJECTS) $(file_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -254,10 +240,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/tbf.Po
-include ./$(DEPDIR)/tdb.Po
-include ./$(DEPDIR)/tm.Po
-include ./$(DEPDIR)/tq.Po
+include ./$(DEPDIR)/ad.Po
+include ./$(DEPDIR)/file.Po
 
 .c.o:
 	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

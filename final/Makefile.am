@@ -1,2 +1,2 @@
-SUBDIRS = libsift libsic src
 CLEANFILES = *~
+SUBDIRS = libsift libsic src

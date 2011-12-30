@@ -3,7 +3,7 @@
  *
  *       Filename:  tm.c
  *
- *    Description:  test main
+ *    Description:  test 插入
  *
  *        Version:  1.0
  *        Created:  2011年12月29日 21时48分47秒
@@ -17,7 +17,7 @@
  */
 
 #include "sicmain.h"
-#include "siclog.h"
+#include "sicutil.h"
 
 int main()
 {
@@ -26,7 +26,6 @@ int main()
 		return -1;
 	sic_insert("qq2.jpg","tx");
 //	sic_cleardb();
-	sic_status();
 	sic_end();
 	return 0;
 }

@@ -3,7 +3,7 @@
  *
  *       Filename:  tdb.c
  *
- *    Description:  Test for db
+ *    Description:  测数据库
  *
  *        Version:  1.0
  *        Created:  2011年12月27日 20时14分34秒
@@ -22,7 +22,6 @@
 
 int main(int argc,char **argv)
 {	
-//	printf("%d-><-%d\n",sizeof(sic_dbitem),sizeof(sic_dbitem*));
 	debugon();
 	sic_dbdao *dbdao;
 	dbdao=sic_dbdao_init(RAW,".sic/db");
@@ -31,13 +30,8 @@ int main(int argc,char **argv)
 
 	sic_dbitem *r;int cou;
 	dbdao->query(*(argv+1),&r,&cou);
-//	dbdao->query("t");
-//	dbdao->clear();
-//	dbdao->insert(make_sic_dbitem("风","或","a"));
-//	sic_dbitem *p=make_sic_dbitem("风","或","a");
-//	dbitem_print(p);
+	
 	sic_dbdao_close(dbdao);
-//	printf("Fine\n");
 	return 0;
 }
 
