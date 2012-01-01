@@ -1,3 +1,0 @@
-rm -rf Makefile.am
-rm -rf auto*
-find -name *~ -exec rm {} +
