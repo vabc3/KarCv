@@ -15,19 +15,16 @@
  *
  * =====================================================================================
  */
+
 #include "func.h"
 #include "arg.h"
-#include "sicmain.h"
-#include "sicutil.h"
+sic_opt op;
 
 int main(int argc,char **argv){
-	debug();
-//	sic_init();
 	
-	sic_opt *op;
-	op=parse_opt(argc,argv);
-
-//	sic_end();
+	parse_opt(argc,argv);
+	docmd();
 
 	return 0;
 }
+

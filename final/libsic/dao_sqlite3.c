@@ -19,7 +19,6 @@
 #include <stdlib.h>
 #include <sqlite3.h>
 #include "sicutil.h"
-#include "sicdb.h"
 #include "sicdbdao.h"
 
 static sqlite3 *db;

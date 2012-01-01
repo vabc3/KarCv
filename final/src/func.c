@@ -18,8 +18,51 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "sicutil.h"
-#include "sicmain.h"
+#include <sic.h>
+#include "arg.h"
+
+extern sic_opt op;
+static void debug();
+static void version();
+static void usage();
+static void status();
+static void clear();
+static void insert();
+static void import();
+static void match();
+
+
+void docmd()
+{
+	if(op.debug)
+		debug();
+	sic_init();
+	switch(op.cmd){
+		case Cversion:
+			version();
+			break;
+		case Cstatus:
+			status();
+			break;
+		case Cclear:
+			clear();
+			break;
+		case Cinsert:
+			insert();
+			break;
+		case Cimport:
+			import();
+			break;
+		case Cmatch:
+			match();
+			break;
+		case Chelp:
+		case Cundef:
+			usage();
+			break;
+	}
+	sic_end();
+}
 
 static void printt(char *it,char *desc){
 	printf("%-30s%s\n",it,desc);
@@ -27,14 +70,14 @@ static void printt(char *it,char *desc){
 
 void debug()
 {
-	debugon();	
+	sic_debug();	
 }
 
 void usage()
 {
 	printf("Usage:sic [OPTION] <COMMAND [OPTION]>\n"
 			"Options:\n"
-			);
+		  );
 	printt("-d/--debug","Enbable verbose debug logging");
 	printf("\nAvailable commands:\n");
 	printt("version","Show ver info");
@@ -71,3 +114,50 @@ void status()
 	free(its);
 }
 
+void clear()
+{
+	sic_cleardb();
+}
+
+void insert()
+{
+	if(!op.key){
+		printf("key must be set.\n");
+		return;
+	}
+	if(!op.path){
+		printf("Path must be set.\n");
+		return;
+	}
+	sic_insert(op.path,op.key);
+}
+
+void import()
+{
+	if(!op.path){
+		printf("Path must be set.\n");
+		return;
+	}
+	printf("%d files Added.\n",sic_autoadd(op.path));
+}
+
+void match()
+{
+	sic_item *si;
+	sic_dbitem *item;
+	int i,n;
+	if(!op.path){
+		printf("Path must be set.\n");
+		return;
+	}
+	if(!op.key){
+		sic_matchlist(op.path,"",&si,&n);
+	}else
+		sic_matchlist(op.path,op.key,&si,&n);
+
+	for(i=0;i<n;i++){
+		item = (si+i)->dbitem;
+		printf("%d. %.2f%%|%s\t|%s\t|\n",i+1,(si+i)->appo,item->description,item->imagefile);
+	}
+
+}

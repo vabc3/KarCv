@@ -1,5 +1,4 @@
-AM_CFLAGS		= `pkg-config --cflags opencv`
-AM_LDFLAGS		= `pkg-config --libs opencv`
+AM_CFLAGS		= `pkg-config --cflags opencv` -fPIC
 lib_LIBRARIES 	= libsift.a
 libsift_a_SOURCES = imgfeatures.c utils.c sift.c kdtree.c minpq.c xform.c
 

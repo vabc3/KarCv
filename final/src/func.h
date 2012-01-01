@@ -16,11 +16,4 @@
  * =====================================================================================
  */
 
-void debug();
-void version();
-void usage();
-void insert();
-void status();
-void autoadd();
-void matchlist();
-void matchone();
+void docmd();

@@ -18,7 +18,7 @@
 #include "sicdbdao.h"
 #include "sicfeat.h"
 #include "sicutil.h"
-#include "sicmain.h"
+#include "sic.h"
 #include <sys/time.h>
 #include <stdio.h>
 #include <string.h>
@@ -29,7 +29,7 @@ static char fnbuf[255];
 
 void sic_getver(char *st)
 {
-	sprintf(st,"%s %s",PACKAGENAME,SICVERSION);
+	sprintf(st,"%s version %s",PACKAGENAME,SICVERSION);
 }
 
 static void filename_gen(){
@@ -99,6 +99,16 @@ int sic_status(sic_dbitem **its,int *n)
 
 	return 0;
 }
+static int pc;
+static void fp(const char *st){
+	char buf[255];
+
+	if(!check_imgfile(st,buf)){
+		sic_log("Desc:%s",buf);
+		if(!sic_insert(st,buf))pc++;
+	}
+}
+
 
 int sic_autoadd(char *dir){
 	if(!dao){
@@ -106,9 +116,9 @@ int sic_autoadd(char *dir){
 		return -1;
 	}
 	sic_log("自动添加：%s",dir);
-
-
-	return 0;
+	pc=0;
+	process_file(dir,fp);	
+	return pc;
 }
 
 static int compar(const void *a,const void *b){
@@ -131,7 +141,7 @@ static int genlist(char *imgfile,char *key,sic_item **si,int *n){
 	for(i=0;i<cou;i++){
 		(*si+i)->dbitem	= its+i;
 		load_feature((its+i)->featurefile,&each_f,&ne);
-		(*si+i)->appo	= 100.0 * compare_feature(each_f,ne,base_f,nb) / nf ;
+		(*si+i)->appo	= 100.0 * compare_feature(base_f,nb,each_f,ne) / nf ;
 	}
 	*n=cou;
 	free(base_f);
@@ -152,3 +162,7 @@ int sic_matchlist(char *imgfile,char *key,sic_item **si,int *n){
 	return 0;
 }
 
+void sic_debug()
+{
+	debugon();
+}

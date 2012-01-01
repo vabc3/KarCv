@@ -15,20 +15,24 @@
  *
  * =====================================================================================
  */
-
+#ifndef ARG_H
+#define ARG_H
 #define N 70
+
 typedef enum cmds_s{
-	Cundef,Cversion,Cstatus,Cclear,Cinsert,Cimport,Cmatch
+	Cversion,Cstatus,Cclear,Cinsert,Cimport,Cmatch,Chelp,Cundef
 }cmds;
 
 typedef struct opt_s{
 	cmds cmd;
 	int debug;
-	char img[N];
-	char key[N];
-	char dir[N];
+	char *path;
+	char *key;
 	int showlist;
 }sic_opt;
 
+extern sic_opt op;
 
-sic_opt* parse_opt(int argc,char **argv);
+void parse_opt(int argc,char **argv);
+
+#endif

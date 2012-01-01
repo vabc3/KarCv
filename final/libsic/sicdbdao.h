@@ -19,7 +19,7 @@
 #ifndef SICDBDAO_H
 #define SICDBDAO_H
 
-#include "sicdb.h"
+#include "sic.h"
 
 typedef enum sic_dbtype_e{
 	SQLITE3,

@@ -15,76 +15,80 @@
  *
  * =====================================================================================
  */
+
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
 #include "arg.h"
-#include "sicutil.h"
 
 static struct option lop[] ={
-	{"debug"	, 0, 0, 'd'},
-	{"version"	, 0, 0, 'v'},
-	{"status"	, 0, 0, 's'},
-	{"clear"	, 0, 0, 'c'},
-	{"insert"	, 0, 0, 'i'},
-	{"import"	, 0, 0, 'p'},
-	{"match"	, 0, 0, 'm'},
-	{"list"		, 0, 0, 'l'},
+	{"debug", 	no_argument, 		0, 'd'},
+	{"version",	no_argument, 		0, 'v'},
+	{"status", 	no_argument, 		0, 's'},
+	{"clear",	no_argument, 		0, 'c'},
+	{"insert",	no_argument,	 	0, 'i'},
+	{"import",	no_argument, 		0, 'o'},
+	{"match",	no_argument,	 	0, 'm'},
+	{"list",	no_argument, 		0, 'l'},
+	{"path",	required_argument,	0, 'p'},
+	{"key",		required_argument,	0, 'k'},
 	{0,0,0,0}
 };
-static char sop[]="dvsci:p:m:l";
+static char sop[]="dvsciomlp:k:";
 
 static void argdump(sic_opt *p)
 {
-	sic_log("debug=%d,list=%d",p->debug,p->showlist);
-	sic_log("cmd=%d",p->cmd);
-	sic_log("dir=%s,img=%s,key=%s",p->dir,p->img,p->key);
+	printf("debug=%d,list=%d\n",p->debug,p->showlist);
+	printf("cmd=%d\n",p->cmd);
+	printf("dirimg=%s,key=%s\n",p->path,p->key);
 }
 
 
-sic_opt* parse_opt(int argc,char **argv)
+void parse_opt(int argc,char **argv)
 {
-	sic_opt *o;
-	o=(sic_opt*)malloc(sizeof(sic_opt));
-	strcpy(o->dir,"a");
-	strcpy(o->img,"b");
-	strcpy(o->key,"c");
-
-
 	int c;
+	op.cmd=Cundef;
+	op.debug=0;
+	op.path=op.key=NULL;
+	op.showlist=0;
 	do{
 		c= getopt_long(argc,argv,sop,lop,NULL);
 
 		switch(c){
 			case 'd':
-				o->debug=1;
+				op.debug=1;
 				break;
 			case 'v':
-				o->cmd=Cversion;
+				op.cmd=Cversion;
 				break;
 			case 's':
-				o->cmd=Cstatus;
+				op.cmd=Cstatus;
 				break;
 			case 'c':
-				o->cmd=Cclear;
+				op.cmd=Cclear;
 				break;
 			case 'i':
-				o->cmd=Cinsert;
+				op.cmd=Cinsert;
 				break;
-			case 'p':
-				o->cmd=Cimport;
+			case 'o':
+				op.cmd=Cimport;
 				break;
 			case 'm':
-				o->cmd=Cmatch;
+				op.cmd=Cmatch;
 				break;
 			case 'l':
-				o->showlist=1;
+				op.showlist=1;
+				break;
+			case 'p':
+				op.path=optarg;
+				break;
+			case 'k':
+				op.key=optarg;
 				break;
 			default:
-				free(o);
-				return NULL;
+				break;
 		}
 	}while (c!=-1);
-	argdump(o);
-	return o;
+//	argdump(&op);
 }
