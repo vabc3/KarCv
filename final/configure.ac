@@ -14,6 +14,9 @@ AC_PROG_LIBTOOL
 
 AC_SEARCH_LIBS(sqlite3_open, sqlite3)
 AC_SEARCH_LIBS(pow,m)
+AC_SEARCH_LIBS(cvLine,opencv_core,,AC_MSG_ERROR([opencv lib needed]))
+AC_SEARCH_LIBS(cvLoadImage,opencv_highgui,,AC_MSG_ERROR([opencv lib needed]))
+
 
 AC_CONFIG_MACRO_DIR([m4])
 
