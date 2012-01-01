@@ -18,6 +18,12 @@
 #ifndef SIC_H
 #define SIC_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #define PACKAGENAME	"sic"
 #define SICVERSION "0.1"
 
@@ -47,4 +53,9 @@ extern int sic_insert(const char *imgfile,const char *desc);
 extern int sic_autoadd(char *dir);
 extern int sic_matchlist(char *imgfile,char *key,sic_item**,int*);
 extern void sic_debug();
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

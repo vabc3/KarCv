@@ -15476,7 +15476,7 @@ fi
 done
 
 
-ac_config_files="$ac_config_files Makefile libsift/Makefile libsic/Makefile libsic/test/Makefile src/Makefile"
+ac_config_files="$ac_config_files Makefile libsic/Makefile libsic/test/Makefile src/Makefile"
 
 #AC_SUBST(CFLAGS)
 CFLAGS="-O2 -Wall -g"
@@ -16594,7 +16594,6 @@ do
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "libsift/Makefile") CONFIG_FILES="$CONFIG_FILES libsift/Makefile" ;;
     "libsic/Makefile") CONFIG_FILES="$CONFIG_FILES libsic/Makefile" ;;
     "libsic/test/Makefile") CONFIG_FILES="$CONFIG_FILES libsic/test/Makefile" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;

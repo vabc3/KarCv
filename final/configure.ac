@@ -36,7 +36,6 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([getcwd gettimeofday memset mkdir pow sqrt strrchr],[],[AC_MSG_ERROR([缺失所需函数])])
 
 AC_CONFIG_FILES([Makefile
-				 libsift/Makefile
                  libsic/Makefile
                  libsic/test/Makefile
 				 src/Makefile

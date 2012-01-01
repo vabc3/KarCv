@@ -51,6 +51,9 @@ am_sic_OBJECTS = main.$(OBJEXT) arg.$(OBJEXT) func.$(OBJEXT)
 sic_OBJECTS = $(am_sic_OBJECTS)
 sic_LDADD = $(LDADD)
 sic_DEPENDENCIES = ../libsic/libsic.la
+sic_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(sic_LDFLAGS) \
+	$(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -188,9 +191,9 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CFLAGS = -I../libsic
-#AM_LDFLAGS		= `pkg-config --libs opencv`
-LDADD = ../libsic/libsic.la -L../libsift -lsift
+LDADD = ../libsic/libsic.la
 sic_SOURCES = main.c arg.c func.c
+sic_LDFLAGS = -static
 all: all-am
 
 .SUFFIXES:
@@ -204,9 +207,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign src/Makefile
+	  $(AUTOMAKE) --gnu src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -270,7 +273,7 @@ clean-binPROGRAMS:
 	rm -f $$list
 sic$(EXEEXT): $(sic_OBJECTS) $(sic_DEPENDENCIES) 
 	@rm -f sic$(EXEEXT)
-	$(LINK) $(sic_OBJECTS) $(sic_LDADD) $(LIBS)
+	$(sic_LINK) $(sic_OBJECTS) $(sic_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -509,7 +512,6 @@ uninstall-am: uninstall-binPROGRAMS
 	pdf pdf-am ps ps-am tags uninstall uninstall-am \
 	uninstall-binPROGRAMS
 
-#sic_LDFLAGS	= -static
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

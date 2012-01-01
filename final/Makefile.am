@@ -1,3 +1,3 @@
 AUTOMAKE_OPTIONS=foreign 
 CLEANFILES = *~
-SUBDIRS = libsift libsic src
+SUBDIRS = libsic src
