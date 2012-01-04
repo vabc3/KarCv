@@ -20,7 +20,7 @@
 #define sic_log(fmt...) sic_log_f(__FILE__, __LINE__, fmt)
 
 extern void debugon();
-extern void sic_log_f(const char *filename,const int ling,const char *fmt,...);
+extern void sic_log_f(const char *filename,const unsigned int,const char *fmt,...);
 
 extern int is_dir(const char *name);
 extern int is_file(const char *name);

@@ -1,5 +1,5 @@
 AC_PREREQ([2.68])
-AC_INIT([SIC], [0.1], [vabc3h@gmail.com])
+AC_INIT([SIC], [0.1.1], [vabc3h@gmail.com])
 AC_CONFIG_SRCDIR([src/main.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE
@@ -33,7 +33,7 @@ AC_C_INLINE
 # Checks for library functions.
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
-AC_CHECK_FUNCS([getcwd gettimeofday memset mkdir pow sqrt strrchr],[],[AC_MSG_ERROR([缺失所需函数])])
+AC_CHECK_FUNCS([realpath gettimeofday memset mkdir pow sqrt strrchr],[],[AC_MSG_ERROR([缺失所需函数])])
 
 AC_CONFIG_FILES([Makefile
                  libsic/Makefile
@@ -41,6 +41,9 @@ AC_CONFIG_FILES([Makefile
 				 src/Makefile
 				 ])
 #AC_SUBST(CFLAGS)
-CFLAGS="-O2 -Wall -g"
+CFLAGS="-O2 -g -Werror"
+
+# -Wno-pragmas"
+
 AC_OUTPUT
 

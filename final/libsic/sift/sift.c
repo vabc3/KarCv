@@ -1,3 +1,4 @@
+//#pragma warning (disable:193)
 /*
    Functions for detecting SIFT image features.
 
@@ -123,11 +124,14 @@ int _sift_features( IplImage* img, struct feature** feat, int intvls,
 	int octvs, i, n = 0;
 
 	/* check arguments */
-	if( ! img )
+	if( ! img ){
 		fatal_error( "NULL pointer error, %s, line %d",  __FILE__, __LINE__ );
-	if( ! feat )
+		return -1;
+	}
+	if( ! feat ){
 		fatal_error( "NULL pointer error, %s, line %d",  __FILE__, __LINE__ );
-
+		return -1;
+	}
 	/* build scale space pyramid; smallest dimension of top level is ~4 pixels */
 	init_img = create_init_img( img, img_dbl, sigma );
 	octvs = log( MIN( init_img->width, init_img->height ) ) / log(2) - 2;
@@ -922,15 +926,16 @@ static void smooth_ori_hist( double* hist, int n )
 static double dominant_ori( double* hist, int n )
 {
 	double omax;
-	int maxbin, i;
+//	int maxbin, 
+	int i;
 
 	omax = hist[0];
-	maxbin = 0;
+//	maxbin = 0;
 	for( i = 1; i < n; i++ )
 		if( hist[i] > omax )
 		{
 			omax = hist[i];
-			maxbin = i;
+//			maxbin = i;
 		}
 	return omax;
 }

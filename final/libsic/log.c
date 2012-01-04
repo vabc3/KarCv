@@ -17,6 +17,7 @@
  */
 #include <stdio.h>
 #include <stdarg.h>
+#include "sicutil.h"
 
 static int debug=0;
 
@@ -26,7 +27,7 @@ void debugon()
 }
 
 
-void sic_log_f(const char *filename,const int line,const char *fmt,...)
+void sic_log_f(const char *filename,const unsigned int line,const char *fmt,...)
 {
 	char buf[255];
 	char *pb;

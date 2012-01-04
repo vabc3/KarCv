@@ -20,20 +20,22 @@
 #include <sqlite3.h>
 #include "sicutil.h"
 #include "sicdbdao.h"
+#include "sicdbdao_sqlite3.h"
 
 static sqlite3 *db;
 static int count;
 
-const static char DB_CREATE[]="create table if not exists sicdb("
+static const char DB_CREATE[]="create table if not exists sicdb("
 							"id integer primary key autoincrement,"
 							"imagefile varchar(255),"
 							"featurefile varchar(255),"
 							"description varchar(255))";
-const static char DB_CLEAR[]="delete from sicdb";
-const static char DB_INSERT[]="insert into sicdb (imagefile,featurefile,description)"
+static const char DB_CLEAR[]="delete from sicdb";
+static const char DB_INSERT[]="insert into sicdb (imagefile,featurefile,description)"
 								"values('%s','%s','%s')";
-const static char DB_QUERY[]="select * from sicdb where description like '%%%s%%'";
+static const char DB_QUERY[]="select * from sicdb where description like '%%%s%%'";
 
+//static int query_cb(void *a,int b, char **c,char **d);
 
 int sic_sqlite3_open(const char *arg){
 	
@@ -83,7 +85,7 @@ int sic_sqlite3_insert(const sic_dbitem* item)
 	return 0;
 }
 
-int query_cb(void *a,int b, char **c,char **d)
+static int query_cb(void *a,int b, char **c,char **d)
 {
 //	sic_log("回调被呼叫 id=%s",*c);
 	count++;
@@ -96,7 +98,7 @@ int query_cb(void *a,int b, char **c,char **d)
 	return 0;
 }
 
-int sic_sqlite3_query(const char *key,const sic_dbitem **its,int *cou)
+int sic_sqlite3_query(const char *key,sic_dbitem** const its,int *cou)
 {	
 	char buf[512];
 	sic_log("查询[%s]",key);
@@ -108,6 +110,8 @@ int sic_sqlite3_query(const char *key,const sic_dbitem **its,int *cou)
 	sqlite3_exec(db,buf,query_cb,its,NULL);
 	sic_log("共%d个结果",count);
 	*cou=count;
+	
+//	const sic_dbitem **tmp = its;
 	dbitems_print(its,*cou);
 /*
 	int i;

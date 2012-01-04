@@ -1,0 +1,5 @@
+gcc + no ipp
+sic -o -p lib -d  36.84s user 2.35s system 87% cpu 44.780 total
+icc + no ipp
+sic -o -p lib -d  27.56s user 2.40s system 85% cpu 34.857 total
+

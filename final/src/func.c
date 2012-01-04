@@ -20,8 +20,8 @@
 #include <stdlib.h>
 #include <sic.h>
 #include "arg.h"
+#include "func.h"
 
-extern sic_opt op;
 static void debug();
 static void version();
 static void usage();
@@ -30,14 +30,30 @@ static void clear();
 static void insert();
 static void import();
 static void match();
+static void nocmdmsg();
+static void multicmdmsg();
 
+static void nocmdmsg()
+{
+	printf("Must specify a command. --help for help\n");
+	exit(-1);
+}
+
+static void multicmdmsg()
+{
+	printf("Only can use one command at one time\n");
+	exit(-1);
+}
 
 void docmd()
 {
 	if(op.debug)
 		debug();
-	sic_init();
+	sic_init(op.dbarg);
 	switch(op.cmd){
+		case Cmulti:
+			multicmdmsg();
+			break;
 		case Cversion:
 			version();
 			break;
@@ -56,8 +72,11 @@ void docmd()
 		case Cmatch:
 			match();
 			break;
-		case Chelp:
 		case Cundef:
+			nocmdmsg();
+			break;
+		case Chelp:
+		default:
 			usage();
 			break;
 	}
@@ -80,13 +99,16 @@ void usage()
 		  );
 	printt("-d/--debug","Enbable verbose debug logging");
 	printf("\nAvailable commands:\n");
-	printt("version","Show ver info");
-	printt("status","Show database status");
-	printt("clear","Clean database");
-	printt("insert <img> <key>","Insert an record");
-	printt("import <dir>","Import an dir");
-	printt("match <img> [key]","Find match record");
-	printf("\nOptions for match:\n");
+	printt("-v/--version","Show ver info");
+	printt("-s/--status","Show database status");
+	printt("-c/--clear","Clean database");
+	printt("-i/--insert","Insert an record");
+	printt("-o/--import","Import an dir");
+	printt("-m/--match","Find match record");
+	printf("\nOptions for commands:\n");
+	printt("-b/--dbdir <db>","Speicfy the db dir(default to ~/.sic/)");
+	printt("-k/--key <key>","Give the key");
+	printt("-p/--path <path>","Specify the dir/file path");
 	printt("-l/--list","show the entire list");
 }
 
@@ -105,11 +127,11 @@ void status()
 	if(sic_status(&its,&n))
 		return;
 
-	printf("现有%d条记录\n",n);
 	for(i=0;i<n;i++){
 		item = its+i;
-		printf("%s\t|%s\t|%s\t|\n",item->imagefile,item->featurefile,item->description);
+		printf("%s\t|%s\t|\n",item->imagefile,item->description);
 	}
+	printf("现有%d条记录\n",n);
 
 	free(its);
 }
@@ -151,13 +173,13 @@ void match()
 		return;
 	}
 	if(!op.key){
-		sic_matchlist(op.path,"",&si,&n);
+		n=sic_matchlist(op.path,"",&si,-1);
 	}else
-		sic_matchlist(op.path,op.key,&si,&n);
+		n=sic_matchlist(op.path,op.key,&si,-1);
 
 	for(i=0;i<n;i++){
 		item = (si+i)->dbitem;
 		printf("%d. %.2f%%|%s\t|%s\t|\n",i+1,(si+i)->appo,item->description,item->imagefile);
 	}
-
+	sic_free(si,n);
 }

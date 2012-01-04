@@ -24,7 +24,7 @@
 
 
 
-void dbitems_print(const sic_dbitem **items,const int count)
+void dbitems_print(sic_dbitem** const items,const int count)
 {
 	int i;
 	sic_log("---%d结果打印开始---",count);

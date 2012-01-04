@@ -24,8 +24,8 @@ extern "C" {
 #endif
 
 
-#define PACKAGENAME	"sic"
-#define SICVERSION "0.1"
+#define PACKAGENAME	"libsic"
+#define SICVERSION "0.1.1"
 
 #define STRMLEN 125
 
@@ -45,13 +45,14 @@ typedef struct sic_item_s{
 } sic_item;
 
 extern void sic_getver(char *st);
-extern int sic_init();
+extern int sic_init(char *dbarg);
 extern int sic_end();
 extern int sic_cleardb();
-extern int sic_status(sic_dbitem **its,int *n);
+extern int sic_status(sic_dbitem** const its,int *n);
 extern int sic_insert(const char *imgfile,const char *desc);
 extern int sic_autoadd(char *dir);
-extern int sic_matchlist(char *imgfile,char *key,sic_item**,int*);
+extern int sic_matchlist(char *imgfile,char *key,sic_item** const,int topx) __attribute__((warn_unused_result));
+extern void sic_free(sic_item *it,int size);
 extern void sic_debug();
 
 #ifdef __cplusplus

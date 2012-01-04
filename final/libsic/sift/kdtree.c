@@ -445,28 +445,27 @@ static void insertion_sort( double* array, int n )
   @param pivot value around which to partition
 
   @return Returns index of the pivot after partitioning
-*/
+  */
 static int partition_array( double* array, int n, double pivot )
 {
-  double tmp;
-  int p, i, j;
+	double tmp;
+	int p=-1, i=-1, j;
 
-  i = -1;
-  for( j = 0; j < n; j++ )
-    if( array[j] <= pivot )
-      {
-	tmp = array[++i];
-	array[i] = array[j];
-	array[j] = tmp;
-	if( array[i] == pivot )
-	  p = i;
-      }
-  array[p] = array[i];
-  array[i] = pivot;
-  
-  return i;
+	for( j = 0; j < n; j++ )
+		if( array[j] <= pivot ){
+			tmp = array[++i];
+			array[i] = array[j];
+			array[j] = tmp;
+			if( array[i] == pivot )
+				p = i;
+		}
+	if((p!=-1)&&(i!=-1)){
+		array[p] = array[i];
+		array[i] = pivot;
+	}
+
+	return i;
 }
-
 
 
 /*
@@ -477,36 +476,37 @@ static int partition_array( double* array, int n, double pivot )
 */
 static void partition_features( struct kd_node* kd_node )
 {
-  struct feature* features, tmp;
-  double kv;
-  int n, ki, p, i, j = -1;
+	struct feature* features, tmp;
+	double kv;
+	int n, ki, p=-1, i, j = -1;
 
-  features = kd_node->features;
-  n = kd_node->n;
-  ki = kd_node->ki;
-  kv = kd_node->kv;
-  for( i = 0; i < n; i++ )
-    if( features[i].descr[ki] <= kv )
-      {
-	tmp = features[++j];
-	features[j] = features[i];
-	features[i] = tmp;
-	if( features[j].descr[ki] == kv )
-	  p = j;
-      }
-  tmp = features[p];
-  features[p] = features[j];
-  features[j] = tmp;
+	features = kd_node->features;
+	n = kd_node->n;
+	ki = kd_node->ki;
+	kv = kd_node->kv;
+	for( i = 0; i < n; i++ )
+		if( features[i].descr[ki] <= kv )
+		{
+			tmp = features[++j];
+			features[j] = features[i];
+			features[i] = tmp;
+			if( features[j].descr[ki] == kv )
+				p = j;
+		}
+	if((p!=-1)&&(j!=-1)){
+		tmp = features[p];
+		features[p] = features[j];
+		features[j] = tmp;
+	}
+	/* if all records fall on same side of partition, make node a leaf */
+	if( j == n - 1 )
+	{
+		kd_node->leaf = 1;
+		return;
+	}
 
-  /* if all records fall on same side of partition, make node a leaf */
-  if( j == n - 1 )
-    {
-      kd_node->leaf = 1;
-      return;
-    }
-
-  kd_node->kd_left = kd_node_init( features, j + 1 );
-  kd_node->kd_right = kd_node_init( features + ( j + 1 ), ( n - j - 1 ) );
+	kd_node->kd_left = kd_node_init( features, j + 1 );
+	kd_node->kd_right = kd_node_init( features + ( j + 1 ), ( n - j - 1 ) );
 }
 
 

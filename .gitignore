@@ -1,4 +1,8 @@
 *.o
+*.lo
 auto*
 *~
 configure
+tags
+*.plist
+.deps

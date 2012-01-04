@@ -24,8 +24,13 @@
 #include <string.h>
 #include <stdlib.h>
 
+static const char dirfile[]	= ".sic";
+static const char sqlite3_dbfile[]	= "db";
+
+
+
 static sic_dbdao* dao=NULL;
-static char fnbuf[255];
+static char fnbuf[255],dbdir[255];
 
 void sic_getver(char *st)
 {
@@ -35,14 +40,17 @@ void sic_getver(char *st)
 static void filename_gen(){
 	struct timeval tmv;
 	gettimeofday(&tmv,NULL);
-	sprintf(fnbuf,".sic/si%lu.%lu.ft",tmv.tv_sec,tmv.tv_usec);
+	sprintf(fnbuf,"si%lu.%lu.ft",tmv.tv_sec,tmv.tv_usec);
 }
 
-int sic_init()
+int sic_init(char *dbarg)
 {
 	sic_log("Sic Init");
-	make_dir(".sic");
-	dao=sic_dbdao_init(SQLITE3,".sic/db");
+	sprintf(dbdir,"%s/%s",dbarg,dirfile);
+
+	make_dir(dbdir);
+	sprintf(fnbuf,"%s/%s",dbdir,sqlite3_dbfile);
+	dao=sic_dbdao_init(SQLITE3,fnbuf);
 	if(!dao)
 		return -1;
 	return 0;
@@ -65,13 +73,17 @@ int sic_insert(const char *imgfile,const char *desc)
 	sic_log("Ins %s(%s)",imgfile,desc);
 	filename_gen();
 	sic_log("%s",fnbuf);
-	if(create_featurefile(imgfile,fnbuf)){
+	char ebuf[255];
+	sprintf(ebuf,"%s/%s",dbdir,fnbuf);
+
+	if(create_featurefile(imgfile,ebuf)){
 		return -1;
 	}
-	make_sic_dbitem(item,imgfile,fnbuf,desc);
-//	strcpy(item.imagefile,imgfile);
-//	strcpy(item.featurefile,fnbuf);
-//	strcpy(item.description,desc);
+	char *tmp;
+	tmp	= realpath(imgfile,NULL);
+	
+	make_sic_dbitem(item,tmp,fnbuf,desc);
+	free(tmp);
 	if(dao->insert(item)){
 		return -1;
 	}
@@ -89,7 +101,7 @@ int sic_cleardb()
 	return dao->clear();
 }
 
-int sic_status(sic_dbitem **its,int *n)
+int sic_status(sic_dbitem** const its,int *n)
 {
 	if(!dao){
 		sic_log("Not inited");
@@ -100,6 +112,7 @@ int sic_status(sic_dbitem **its,int *n)
 	return 0;
 }
 static int pc;
+
 static void fp(const char *st){
 	char buf[255];
 
@@ -108,7 +121,6 @@ static void fp(const char *st){
 		if(!sic_insert(st,buf))pc++;
 	}
 }
-
 
 int sic_autoadd(char *dir){
 	if(!dao){
@@ -122,13 +134,14 @@ int sic_autoadd(char *dir){
 }
 
 static int compar(const void *a,const void *b){
+//	sic_log("%s vs %s",(((sic_item*)a)->dbitem->imagefile,((sic_item*)b)->dbitem->imagefile));
 	return (((sic_item*)a)->appo<((sic_item*)b)->appo);
 }
 
 static int genlist(char *imgfile,char *key,sic_item **si,int *n){
 	s_feature *base_f,*each_f;
 	int nb,nf,cou,i,ne;
-	sic_dbitem *its;
+	sic_dbitem* its;
 	
 	sic_log("列表");
 	genfeature(imgfile,&base_f,&nb);
@@ -137,32 +150,51 @@ static int genlist(char *imgfile,char *key,sic_item **si,int *n){
 	
 	nf=compare_feature(base_f,nb,base_f,nb);
 	*si=(sic_item*)malloc(cou*sizeof(sic_item));
-	
+
+	char ff[266];
+
 	for(i=0;i<cou;i++){
 		(*si+i)->dbitem	= its+i;
-		load_feature((its+i)->featurefile,&each_f,&ne);
-		(*si+i)->appo	= 100.0 * compare_feature(base_f,nb,each_f,ne) / nf ;
+		sprintf(ff,"%s/%s",dbdir,(its+i)->featurefile);
+		load_feature(ff,&each_f,&ne);
+		(*si+i)->appo	=(float) 100.0 * compare_feature(base_f,nb,each_f,ne) / nf ;
+		free(each_f);
 	}
 	*n=cou;
 	free(base_f);
-
 	return 0;
 }
 
-int sic_matchlist(char *imgfile,char *key,sic_item **si,int *n){
-	
+int sic_matchlist(char *imgfile,char *key,sic_item **si,int topx){
+	int n;	
 	if(!dao){
 		sic_log("Not inited");
 		return -1;
 	}
 	sic_log("Call genlist");
-	genlist(imgfile,key,si,n);
-	qsort(*si,*n,sizeof(sic_item),compar);
 
-	return 0;
+	genlist(imgfile,key,si,&n);
+	qsort(*si,n,sizeof(sic_item),compar);
+
+	if((topx>0)&&(n>topx)){
+		n=topx;
+		*si=realloc(*si,n*sizeof(sic_item));
+	}
+
+	return n;
 }
 
 void sic_debug()
 {
 	debugon();
 }
+
+void sic_free(sic_item *it,int size)
+{
+	int i;
+	for(i=0;i<size;i++){
+		free( (it+i)->dbitem  );
+	}
+	free(it);
+}
+

@@ -15,7 +15,7 @@
 enum feature_type
   {
     FEATURE_OXFD,
-    FEATURE_LOWE,
+    FEATURE_LOWE
   };
 
 /** FEATURE_FWD_MATCH <BR> FEATURE_BCK_MATCH <BR> FEATURE_MDL_MATCH */
@@ -23,7 +23,7 @@ enum feature_match_type
   {
     FEATURE_FWD_MATCH,
     FEATURE_BCK_MATCH,
-    FEATURE_MDL_MATCH,
+    FEATURE_MDL_MATCH
   };
 
 

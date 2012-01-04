@@ -47,7 +47,7 @@ int genfeature(const char *imgfile,s_feature **feature,int *n)
 	}
 	*n = _sift_features( img, feature, intvls, sigma, contr_thr, curv_thr,
 			img_dbl, descr_width, descr_hist_bins );
-
+	cvReleaseImage(&img);
 	return 0;
 }
 
@@ -128,7 +128,7 @@ int compare_feature(s_feature *feat1,int n1,s_feature *feat2,int n2)
 		}
 		free( nbrs );
 	}
-	free(kd_root);
+	kdtree_release(kd_root);
 	sic_log("结果%d",m);
 	return m;
 }

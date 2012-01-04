@@ -22,6 +22,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "sicutil.h"
 
 int is_dir(const char *name)
@@ -66,23 +67,19 @@ static void proc_file(const char *base,char *now,void (*pfunc)(const char *path)
 			}
 			readdir_r(d,p,&q);
 		}
+		closedir(d);
 	}
 }
 
 int process_file(const char *dir,void (*pfunc)(const char *path))
 {
-	//FIXME get absolute path
-	
-	char buf[255],cur[255];
-	if(!is_dir(dir))
-		return -1;
-	getcwd(cur,255);
-	chdir(dir);
-	getcwd(buf,255);
-	chdir(cur);
+	char *buf;
+	buf=realpath(dir,NULL);
 	sic_log("Base Dir:%s",buf);
 
 	proc_file(buf,".",pfunc);
+
+	free(buf);
 
 	return 0;
 }
@@ -111,7 +108,7 @@ int check_imgfile(const char *file,char *desc)
 		}
 		strncpy(desc,++p,n);
 		*(desc+n)='\0';
-//		sic_log("In check desc:%s",desc);
+		//		sic_log("In check desc:%s",desc);
 	}else{
 		sic_log("Unsupported File");
 		return -1;

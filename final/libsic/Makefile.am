@@ -5,5 +5,5 @@ libsic_la_SOURCES 	= dao.c dao_sqlite3.c sicmain.c log.c feat.c file.c \
 					  sift/sift.c  sift/utils.c  sift/xform.c
 
 #libsic_la_LIBADD	= sift/libsift.la
-libsic_la_LDFLAGS 	= -version-info  0:1:0
+libsic_la_LDFLAGS 	= -version-info  1:1
 include_HEADERS		= sic.h

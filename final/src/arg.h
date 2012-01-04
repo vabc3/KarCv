@@ -20,7 +20,7 @@
 #define N 70
 
 typedef enum cmds_s{
-	Cversion,Cstatus,Cclear,Cinsert,Cimport,Cmatch,Chelp,Cundef
+	Cversion,Cstatus,Cclear,Cinsert,Cimport,Cmatch,Chelp,Cmulti,Cundef
 }cmds;
 
 typedef struct opt_s{
@@ -28,6 +28,7 @@ typedef struct opt_s{
 	int debug;
 	char *path;
 	char *key;
+	char *dbarg;
 	int showlist;
 }sic_opt;
 

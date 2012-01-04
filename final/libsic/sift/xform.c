@@ -522,9 +522,11 @@ static void extract_corresp_pts( struct feature** features, int n, int mtype,
     for( i = 0; i < n; i++ )
       {
 	match = get_match( features[i], mtype );
-	if( ! match )
+	if( ! match ){
 	  fatal_error( "feature does not have match of type %d, %s line %d",
-		       mtype, __FILE__, __LINE__ );
+		       mtype, __FILE__, __LINE__ ),abort();
+	  abort();
+	}
 	_pts[i] = features[i]->img_pt;
 	_mpts[i] = match->mdl_pt;
       }
@@ -535,7 +537,7 @@ static void extract_corresp_pts( struct feature** features, int n, int mtype,
 	match = get_match( features[i], mtype );
 	if( ! match )
 	  fatal_error( "feature does not have match of type %d, %s line %d",
-		       mtype, __FILE__, __LINE__ );
+		       mtype, __FILE__, __LINE__ ),abort();
 	_pts[i] = features[i]->img_pt;
 	_mpts[i] = match->img_pt;
       }
@@ -584,7 +586,7 @@ static int find_consensus( struct feature** features, int n, int mtype,
 	match = get_match( features[i], mtype );
 	if( ! match )
 	  fatal_error( "feature does not have match of type %d, %s line %d",
-		       mtype, __FILE__, __LINE__ );
+		       mtype, __FILE__, __LINE__ ),abort();
 	pt = features[i]->img_pt;
 	mpt = match->mdl_pt;
 	err = err_fn( pt, mpt, M );
@@ -598,7 +600,7 @@ static int find_consensus( struct feature** features, int n, int mtype,
 	match = get_match( features[i], mtype );
 	if( ! match )
 	  fatal_error( "feature does not have match of type %d, %s line %d",
-		       mtype, __FILE__, __LINE__ );
+		       mtype, __FILE__, __LINE__ ),abort();
 	pt = features[i]->img_pt;
 	mpt = match->img_pt;
 	err = err_fn( pt, mpt, M );

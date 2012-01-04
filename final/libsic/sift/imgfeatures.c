@@ -197,8 +197,11 @@ static int import_oxfd_features( char* filename, struct feature** features )
   double x, y, a, b, c, dv;
   FILE* file;
 
-  if( ! features )
+  if( ! features ){
     fatal_error( "NULL pointer error, %s, line %d",  __FILE__, __LINE__ );
+	abort();
+//	exit(0);
+}
   if( ! ( file = fopen( filename, "r" ) ) )
     {
       fprintf( stderr, "Warning: error opening %s, %s, line %d\n",
@@ -373,14 +376,10 @@ static void draw_oxfd_feature( IplImage* img, struct feature* feat,
   alpha = -atan2( v[1], v[0] );
   alpha *= 180 / M_PI;
 
-  cvEllipse( img, cvPoint( feat->x, feat->y ), cvSize( l2, l1 ), alpha,
-	     0, 360, CV_RGB(0,0,0), 3, 8, 0 );
-  cvEllipse( img, cvPoint( feat->x, feat->y ), cvSize( l2, l1 ), alpha,
-	     0, 360, color, 1, 8, 0 );
-  cvLine( img, cvPoint( feat->x+2, feat->y ), cvPoint( feat->x-2, feat->y ),
-	  color, 1, 8, 0 );
-  cvLine( img, cvPoint( feat->x, feat->y+2 ), cvPoint( feat->x, feat->y-2 ),
-	  color, 1, 8, 0 );
+  cvEllipse( img, cvPoint((int) feat->x,(int) feat->y ), cvSize((int) l2,(int) l1 ), alpha, 0, 360, CV_RGB(0,0,0), 3, 8, 0 );
+  cvEllipse( img, cvPoint((int) feat->x,(int) feat->y ), cvSize((int) l2,(int) l1 ), alpha, 0, 360, color, 1, 8, 0 );
+  cvLine( img, cvPoint( (int)feat->x+2, (int)feat->y ), cvPoint( (int) feat->x-2,(int) feat->y ), color, 1, 8, 0 );
+  cvLine( img, cvPoint( (int)feat->x, (int)feat->y+2 ), cvPoint((int) feat->x,(int) feat->y-2 ), color, 1, 8, 0 );
 }
 
 
@@ -403,8 +402,10 @@ static int import_lowe_features( char* filename, struct feature** features )
   double x, y, s, o, dv;
   FILE* file;
 
-  if( ! features )
+  if( ! features ){
     fatal_error( "NULL pointer error, %s, line %d",  __FILE__, __LINE__ );
+  abort();
+}
   if( ! ( file = fopen( filename, "r" ) ) )
     {
       fprintf( stderr, "Warning: error opening %s, %s, line %d\n",
