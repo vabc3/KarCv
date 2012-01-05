@@ -1,8 +1,16 @@
 *.o
 *.lo
+*.la
 auto*
-*~
 configure
+Makefile
+config.h
+config.log
+config.status
+.libs
+stamp*
+libtool
+*~
 tags
 *.plist
 .deps
