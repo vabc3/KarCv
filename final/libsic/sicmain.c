@@ -27,10 +27,10 @@
 static const char dirfile[]	= ".sic";
 static const char sqlite3_dbfile[]	= "db";
 
-
-
 static sic_dbdao* dao=NULL;
 static char fnbuf[255],dbdir[255];
+sic_dbitem* its;
+
 
 void sic_getver(char *st)
 {
@@ -141,7 +141,6 @@ static int compar(const void *a,const void *b){
 static int genlist(char *imgfile,char *key,sic_item **si,int *n){
 	s_feature *base_f,*each_f;
 	int nb,nf,cou,i,ne;
-	sic_dbitem* its;
 	
 	sic_log("列表");
 	genfeature(imgfile,&base_f,&nb);
@@ -189,12 +188,14 @@ void sic_debug()
 	debugon();
 }
 
-void sic_free(sic_item *it,int size)
+void sic_free(sic_item **it,int size)
 {
 	int i;
-	for(i=0;i<size;i++){
-		free( (it+i)->dbitem  );
-	}
-	free(it);
+//	for(i=0;i<size;i++){
+//		free( (*it+i)->dbitem  );
+//sic_log("!%s", (*it+i)->dbitem->imagefile);
+//	}
+	free(its);
+	free(*it);
 }
 

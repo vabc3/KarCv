@@ -181,5 +181,6 @@ void match()
 		item = (si+i)->dbitem;
 		printf("%d. %.2f%%|%s\t|%s\t|\n",i+1,(si+i)->appo,item->description,item->imagefile);
 	}
-	sic_free(si,n);
+	printf("Before free\n");
+	sic_free(&si,n);
 }

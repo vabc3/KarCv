@@ -52,7 +52,7 @@ extern int sic_status(sic_dbitem** const its,int *n);
 extern int sic_insert(const char *imgfile,const char *desc);
 extern int sic_autoadd(char *dir);
 extern int sic_matchlist(char *imgfile,char *key,sic_item** const,int topx) __attribute__((warn_unused_result));
-extern void sic_free(sic_item *it,int size);
+extern void sic_free(sic_item **it,int size);
 extern void sic_debug();
 
 #ifdef __cplusplus
