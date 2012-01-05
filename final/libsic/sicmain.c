@@ -29,7 +29,6 @@ static const char sqlite3_dbfile[]	= "db";
 
 static sic_dbdao* dao=NULL;
 static char fnbuf[255],dbdir[255];
-sic_dbitem* its;
 
 
 void sic_getver(char *st)
@@ -101,15 +100,20 @@ int sic_cleardb()
 	return dao->clear();
 }
 
-int sic_status(sic_dbitem** const its,int *n)
+sic_status* sic_getstatus()
 {
 	if(!dao){
 		sic_log("Not inited");
-		return -1;
+		return NULL;
 	}
-	dao->query("",its,n);
-
-	return 0;
+	sic_dbitem *its;
+	int n;
+	dao->query("",&its,&n);
+	free(its);
+	
+	sic_status *rt = (sic_status*)malloc(sizeof(sic_status));
+	rt->count=n;
+	return rt;
 }
 static int pc;
 
@@ -142,8 +146,13 @@ static int genlist(char *imgfile,char *key,sic_item **si,int *n){
 	s_feature *base_f,*each_f;
 	int nb,nf,cou,i,ne;
 	
+	sic_dbitem* its;
 	sic_log("列表");
-	genfeature(imgfile,&base_f,&nb);
+
+	if(genfeature(imgfile,&base_f,&nb)){
+		return -1;
+	}
+	
 	nf=compare_feature(base_f,nb,base_f,nb);
 	dao->query(key,&its,&cou);
 	
@@ -153,7 +162,8 @@ static int genlist(char *imgfile,char *key,sic_item **si,int *n){
 	char ff[266];
 
 	for(i=0;i<cou;i++){
-		(*si+i)->dbitem	= its+i;
+		strncpy((*si+i)->imagefile,(its+i)->imagefile,STRMLEN);
+		strncpy((*si+i)->description,(its+i)->description,STRMLEN);
 		sprintf(ff,"%s/%s",dbdir,(its+i)->featurefile);
 		load_feature(ff,&each_f,&ne);
 		(*si+i)->appo	=(float) 100.0 * compare_feature(base_f,nb,each_f,ne) / nf ;
@@ -161,6 +171,7 @@ static int genlist(char *imgfile,char *key,sic_item **si,int *n){
 	}
 	*n=cou;
 	free(base_f);
+	free(its);
 	return 0;
 }
 
@@ -172,7 +183,9 @@ int sic_matchlist(char *imgfile,char *key,sic_item **si,int topx){
 	}
 	sic_log("Call genlist");
 
-	genlist(imgfile,key,si,&n);
+	if(genlist(imgfile,key,si,&n)){
+		return -1;
+	}
 	qsort(*si,n,sizeof(sic_item),compar);
 
 	if((topx>0)&&(n>topx)){
@@ -188,14 +201,4 @@ void sic_debug()
 	debugon();
 }
 
-void sic_free(sic_item **it,int size)
-{
-	int i;
-//	for(i=0;i<size;i++){
-//		free( (*it+i)->dbitem  );
-//sic_log("!%s", (*it+i)->dbitem->imagefile);
-//	}
-	free(its);
-	free(*it);
-}
 

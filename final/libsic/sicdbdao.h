@@ -18,8 +18,13 @@
 
 #ifndef SICDBDAO_H
 #define SICDBDAO_H
+#define STRMLEN 128
+typedef struct sic_dbitem_s{
+	char imagefile[STRMLEN];        //image path
+	char featurefile[STRMLEN];      //feature file path
+	char description[STRMLEN];      //description
+} sic_dbitem;
 
-#include "sic.h"
 
 typedef enum sic_dbtype_e{
 	SQLITE3,

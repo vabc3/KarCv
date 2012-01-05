@@ -121,19 +121,11 @@ void version()
 
 void status()
 {
-	sic_dbitem *its,*item;
 	int i,n;
-
-	if(sic_status(&its,&n))
-		return;
-
-	for(i=0;i<n;i++){
-		item = its+i;
-		printf("%s\t|%s\t|\n",item->imagefile,item->description);
+	sic_status* st = sic_getstatus();
+	if(st){
+		printf("现有%d条记录\n",st->count),free(st);
 	}
-	printf("现有%d条记录\n",n);
-
-	free(its);
 }
 
 void clear()
@@ -166,7 +158,6 @@ void import()
 void match()
 {
 	sic_item *si;
-	sic_dbitem *item;
 	int i,n;
 	if(!op.path){
 		printf("Path must be set.\n");
@@ -176,11 +167,12 @@ void match()
 		n=sic_matchlist(op.path,"",&si,-1);
 	}else
 		n=sic_matchlist(op.path,op.key,&si,-1);
-
-	for(i=0;i<n;i++){
-		item = (si+i)->dbitem;
-		printf("%d. %.2f%%|%s\t|%s\t|\n",i+1,(si+i)->appo,item->description,item->imagefile);
+	if(n<0){
+		printf("Image error!\n");
 	}
-	printf("Before free\n");
-	sic_free(&si,n);
+	for(i=0;i<n;i++){
+		printf("%d. %.2f%%|%s\t|%s\t|\n",i+1,(si+i)->appo,(si+i)->description,(si+i)->imagefile);
+	}
+//	printf("Before free\n");
+	free(si);
 }
