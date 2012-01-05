@@ -45,7 +45,15 @@ static void filename_gen(){
 int sic_init(char *dbarg)
 {
 	sic_log("Sic Init");
-	sprintf(dbdir,"%s/%s",dbarg,dirfile);
+
+	char dw[255];
+	if(!dbarg){
+		strcpy(dw,getenv("HOME"));
+	}else{
+		strncpy(dw,dbarg,255);
+	}
+
+	sprintf(dbdir,"%s/%s",dw,dirfile);
 
 	make_dir(dbdir);
 	sprintf(fnbuf,"%s/%s",dbdir,sqlite3_dbfile);
