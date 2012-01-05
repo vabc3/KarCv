@@ -6,3 +6,4 @@ configure
 tags
 *.plist
 .deps
+*.in
