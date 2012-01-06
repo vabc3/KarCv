@@ -63,6 +63,7 @@ void parse_opt(int argc,char **argv)
 	op.cmd		=Cundef;
 	op.debug	= 0;
 	op.dbarg	= getenv("HOME");
+	op.dbarg	= NULL;
 	op.path		= NULL;
 	op.key		= NULL;
 	op.showlist	= 0;
