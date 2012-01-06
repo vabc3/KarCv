@@ -17,7 +17,7 @@
  */
 #include <stdio.h>
 #include <stdarg.h>
-#include "sicutil.h"
+#include "util.h"
 
 static int debug=0;
 

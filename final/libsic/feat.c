@@ -20,8 +20,8 @@
 #include <highgui.h>
 #include "sift.h"
 #include "kdtree.h"
-#include "sicutil.h"
-#include "sicfeat.h"
+#include "util.h"
+#include "feat.h"
 
 int intvls = SIFT_INTVLS;
 double sigma = SIFT_SIGMA;

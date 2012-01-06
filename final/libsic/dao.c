@@ -18,9 +18,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "sicutil.h"
-#include "sicdbdao.h"
-#include "sicdbdao_sqlite3.h"
+#include "util.h"
+#include "dao.h"
+#include "dao_sqlite3.h"
 
 
 
@@ -60,7 +60,7 @@ sic_dbdao* sic_dbdao_init(sic_dbtype dbtype,const char *arg)
 			dbdao->connect	= sic_sqlite3_open;
 			dbdao->close	= sic_sqlite3_close;
 			dbdao->clear	= sic_sqlite3_clear;
-			dbdao->insert	= sic_sqlite3_insert;
+			dbdao->save		= sic_sqlite3_save;
 			dbdao->query	= sic_sqlite3_query;
 	}
 	int rt=dbdao->connect(arg);

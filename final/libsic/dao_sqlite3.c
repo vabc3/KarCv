@@ -18,9 +18,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sqlite3.h>
-#include "sicutil.h"
-#include "sicdbdao.h"
-#include "sicdbdao_sqlite3.h"
+#include "util.h"
+#include "dao.h"
+#include "dao_sqlite3.h"
 
 static sqlite3 *db;
 static int count;
@@ -74,7 +74,7 @@ int sic_sqlite3_clear(){
 	return 0;
 }
 
-int sic_sqlite3_insert(const sic_dbitem* item)
+int sic_sqlite3_save(const sic_dbitem* item)
 {
 	char buf[512];
 	sic_log("Insert Called");

@@ -19,7 +19,7 @@
 #define SICDBDAO_SQLITE3_H
 extern int sic_sqlite3_open(const char *arg);
 extern int sic_sqlite3_close();
-extern int sic_sqlite3_insert(const sic_dbitem* item);
+extern int sic_sqlite3_save(const sic_dbitem* item);
 extern int sic_sqlite3_query(const char *key,sic_dbitem** const its,int *count);
 extern int sic_sqlite3_clear();
 #endif

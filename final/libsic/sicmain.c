@@ -15,16 +15,17 @@
  *
  * =====================================================================================
  */
-#include "sicdbdao.h"
-#include "sicfeat.h"
-#include "sicutil.h"
+#include "dao.h"
+#include "feat.h"
+#include "util.h"
 #include "sic.h"
 #include <sys/time.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-static const char dirfile[]	= ".sic";
+static const char dirfile[]			= ".sic";
+static const char ftprefix[]		= "ft";
 static const char sqlite3_dbfile[]	= "db";
 
 static sic_dbdao* dao=NULL;
@@ -91,7 +92,7 @@ int sic_insert(const char *imgfile,const char *desc)
 	
 	make_sic_dbitem(item,tmp,fnbuf,desc);
 	free(tmp);
-	if(dao->insert(item)){
+	if(dao->save(item)){
 		return -1;
 	}
 	free(item);
@@ -105,6 +106,8 @@ int sic_cleardb()
 		sic_log("Not inited");
 		return -1;
 	}
+
+	dir_ftclean(dbdir,ftprefix);
 	return dao->clear();
 }
 

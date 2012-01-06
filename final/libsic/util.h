@@ -28,5 +28,5 @@ extern int get_dirname(const char *dir,char *dname);
 extern int process_file(const char *dir,void (*pfunc)(const char *path));
 extern int make_dir(const char *dir);
 extern int check_imgfile(const char *file,char *desc);
-
+extern void dir_ftclean(const char *dir,const char *prefix);
 #endif

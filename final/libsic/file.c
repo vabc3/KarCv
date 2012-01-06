@@ -23,7 +23,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "sicutil.h"
+#include "util.h"
+
+static void ftfile_delete(const char *path);
 
 int is_dir(const char *name)
 {
@@ -117,3 +119,33 @@ int check_imgfile(const char *file,char *desc)
 	return 0;
 }
 
+void dir_ftclean(const char *dir,const char *prefix)
+{
+	sic_log("ftclean:%s",dir);
+	if(!is_dir(dir))
+		return;
+	DIR *d=opendir(dir);
+	struct dirent *p,*q=readdir(d);
+	char buf[255];
+
+	int len=strlen(prefix);
+	while(q){
+		p=q;
+//		sic_log("Delete Search File:%s",p->d_name);
+		if(!strncmp(p->d_name,prefix,len)){
+			sprintf(buf,"%s/%s",dir,p->d_name);
+//			sic_log("Delete Confirm File:%s",buf);
+			ftfile_delete(buf);
+		}
+		readdir_r(d,p,&q);
+	}
+	closedir(d);
+}
+
+static void ftfile_delete(const char *path)
+{
+	if(!is_file(path))
+		return;
+	sic_log("Delete File:%s",path);
+	unlink(path);
+}

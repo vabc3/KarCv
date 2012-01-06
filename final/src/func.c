@@ -121,7 +121,7 @@ void version()
 
 void status()
 {
-	int i,n;
+//	int i,n;
 	sic_status* st = sic_getstatus();
 	if(st){
 		printf("现有%d条记录\n",st->count),free(st);

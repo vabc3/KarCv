@@ -20,6 +20,7 @@
 #define SICDBDAO_H
 #define STRMLEN 128
 typedef struct sic_dbitem_s{
+	int id;							//ider
 	char imagefile[STRMLEN];        //image path
 	char featurefile[STRMLEN];      //feature file path
 	char description[STRMLEN];      //description
@@ -36,7 +37,7 @@ struct sic_dbdao_s{
 	int (*connect)(const char *args);
 	int (*close)();
 	int (*clear)();
-	int (*insert)(const sic_dbitem* item);
+	int (*save)(const sic_dbitem* item);
 	int (*query)(const char *key,sic_dbitem** const its,int *count);
 };
 
