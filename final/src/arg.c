@@ -40,6 +40,8 @@ static struct option lop[] ={
 };
 static char sop[]="dvsciomlp:k:hbn";
 
+sic_opt op;
+
 /*
 static void argdump(sic_opt *p)
 {
