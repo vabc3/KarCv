@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  save_pic.c
+ *       Filename:  pall.c
  *
- *    Description:  Save proceeded pic
+ *    Description:  i
  *
  *        Version:  1.0
- *        Created:  2012年01月07日 16时21分08秒
+ *        Created:  2012年01月07日 23时33分47秒
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -16,15 +16,21 @@
  * =====================================================================================
  */
 
+#include "pall.h"
 #include "plugins.h"
-#include "util.h"
-#include "featproc.h"
-#include <cv.h>
-#include <highgui.h>
-void sic_plugin_savepic(void** const data)
+
+int sic_pall_init()
 {
-	sic_log("Plugin Save");
-	IplImage* img;
-	img	= (IplImage*)(*data);
-	cvSaveImage("/tmp/test.jpg",img,NULL);
+	sic_plugin_init();
+	pfix_init();
+	pfeat_init();
+
+	return 0;
+}
+
+int sic_pall_end()
+{
+	sic_plugin_end();
+
+	return 0;
 }

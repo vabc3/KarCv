@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  proc.h
+ *       Filename:  psave.h
  *
- *    Description:  Includer
+ *    Description:  Ps
  *
  *        Version:  1.0
- *        Created:  2012年01月07日 16时33分56秒
+ *        Created:  2012年01月08日 00时51分06秒
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -16,8 +16,4 @@
  * =====================================================================================
  */
 
-#ifndef SIC_PROC_H
-#define SIC_PROC_H
-#include "preproc.h"
-#include "featproc.h"
-#endif
+extern sicpfeat psave;

@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  featproc.h
+ *       Filename:  service.h
  *
- *    Description:  Ft
+ *    Description:  h for service
  *
  *        Version:  1.0
- *        Created:  2012年01月07日 16时23分23秒
+ *        Created:  2012年01月07日 22时37分17秒
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -15,5 +15,12 @@
  *
  * =====================================================================================
  */
+#ifndef SIC_SERVICE_H
+#define SIC_SERVICE_H	
+#include <cv.h>
 
-void sic_plugin_savepic(void** const data);
+int sic_imgopen(char* imgfile,IplImage** img);
+int sic_genfeat(IplImage* img,char* featkey);
+float sic_compfeat(IplImage* img,char* featkey);
+
+#endif

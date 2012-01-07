@@ -19,6 +19,8 @@
 #include "feat.h"
 #include "util.h"
 #include "sic.h"
+#include "service.h"
+#include "plugins/pall.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -51,13 +53,14 @@ int sic_init(char *dbarg)
 	dao=sic_dbdao_init(SQLITE3,fnbuf);
 	if(!dao)
 		return -1;
-
+	sic_pall_init();
 	return 0;
 }
 
 int sic_end()
 {
 	sic_log("Sic End");
+	sic_pall_end();
 	sic_dbdao_close(dao);
 	return 0;
 }
@@ -78,10 +81,13 @@ static int general_update()
 		sprintf(fnbuf,"%s%d.sift",ftprefix,(q+i)->id);
 		sic_log("%s",fnbuf);
 		sprintf(ebuf,"%s/%s",dbdir,fnbuf);
-		if(create_featurefile((q+i)->imagefile,ebuf)){
+//		if(create_featurefile((q+i)->imagefile,ebuf)){
+		IplImage *img;
+		if(sic_imgopen((q+i)->imagefile,&img)){
 			dao->delete((q+i)->id);
 			count--;
 		}else{
+			sic_genfeat(img,fnbuf);
 			strncpy((q+i)->featurefile,fnbuf,STRMLEN);
 			dao->save((q+i));
 		}
@@ -127,7 +133,7 @@ int sic_cleardb()
 
 sic_status* sic_getstatus()
 {
-	if(!dao)return -1;
+	if(!dao)return NULL;
 	
 	sic_dbitem *its;
 	int n;

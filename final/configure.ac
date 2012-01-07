@@ -41,7 +41,7 @@ AC_CONFIG_FILES([Makefile
 				 src/Makefile
 				 ])
 #AC_SUBST(CFLAGS)
-CFLAGS="-O1 -g -Wall"
+CFLAGS="-O1 -g -Werror"
 
 # -Wno-pragmas"
 

@@ -47,7 +47,7 @@ int sic_plugin_end()
 	return 0;
 }
 
-int sic_plugin_regitem(const sic_plugin_type type,void *item)
+int sic_plugin_regitem(const int type,void *item)
 {
 	sic_plugin_chain* p;
 	p		= malloc(sizeof(sic_plugin_chain));
@@ -58,23 +58,25 @@ int sic_plugin_regitem(const sic_plugin_type type,void *item)
 	return 0;
 }
 
-int sic_plugin_regproc(const sic_plugin_type type,sic_plugin_proc* func)
+int sic_plugin_regproc(const int type,sic_plugin_proc* func)
 {
 	sic_log("***PLUGIN REGPROC***");
 	funcs[type]=func;
 	return 0;
 }
 
-int sic_plugin_process(const sic_plugin_type type,void *input,void **output)
+int sic_plugin_process(const int type,void *input,void *med,void **output)
 {
 	sic_log("***PLUGIN PROC{%d}***",type);
 	sic_plugin_chain* p;
 	p 	= head->next;
 	while(p!=tail){
-		if(type==p->type){
-			funcs[type](input,output);
+		if(type&(p->type)){
+			funcs[type](p->item,input,med,output);
+			med=*output;
 		}
 		p	= p->next;
 	}
+	sic_log("***PLUGIN PROC{%d}END",type);
 	return 0;
 }
