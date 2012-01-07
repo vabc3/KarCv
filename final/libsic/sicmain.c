@@ -133,10 +133,8 @@ int sic_cleardb()
 
 sic_status* sic_getstatus()
 {
-	if(!dao){
-		sic_log("Not inited");
-		return NULL;
-	}
+	if(!dao)return -1;
+	
 	sic_dbitem *its;
 	int n;
 	dao->query("",&its,&n);
@@ -157,10 +155,8 @@ static void fp(const char *st){
 }
 
 int sic_autoadd(char *dir){
-	if(!dao){
-		sic_log("Not inited");
-		return -1;
-	}
+	if(!dao)return -1;
+	
 	sic_log("自动添加：%s",dir);
 	process_file(dir,fp);	
 	return general_update();
