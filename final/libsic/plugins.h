@@ -17,15 +17,21 @@
  */
 #ifndef SIC_PLUGIN_H
 #define SIC_PLUGIN_H
+
+typedef enum sic_plugin_type_s
+{
+	PREPROC,FEATPROC
+}sic_plugin_type;
+
 typedef struct sic_plugin_chain_s
 {
 	void (*proc)(void** const data);
-	int type;//0->filter 1->procedure
+	sic_plugin_type type;//0->filter 1->procedure
 	struct sic_plugin_chain_s *next;
 }sic_plugin_chain;
 
 int sic_plugin_init();
 int sic_plugin_end();
-int sic_plugin_reg(const int type,void (*func)(void** const));
-int sic_plugin_process(const int type,void *data);
+int sic_plugin_reg(const sic_plugin_type type,void (*func)(void** const));
+int sic_plugin_process(const sic_plugin_type type,void *data);
 #endif

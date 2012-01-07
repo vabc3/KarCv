@@ -46,7 +46,7 @@ int sic_plugin_end()
 	return 0;
 }
 
-int sic_plugin_reg(const int type,void (*func)(void** const))
+int sic_plugin_reg(const sic_plugin_type type,void (*func)(void** const))
 {
 	sic_log("***PLUGIN REG***");
 	sic_plugin_chain* p;
@@ -58,7 +58,7 @@ int sic_plugin_reg(const int type,void (*func)(void** const))
 	return 0;
 }
 
-int sic_plugin_process(const int type,void *data)
+int sic_plugin_process(const sic_plugin_type type,void *data)
 {
 	sic_log("***PLUGIN PROC{%d}***",type);
 	sic_plugin_chain* p;

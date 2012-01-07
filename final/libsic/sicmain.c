@@ -20,6 +20,7 @@
 #include "util.h"
 #include "sic.h"
 #include "plugins.h"
+#include "plugins/proc.h"
 #include <sys/time.h>
 #include <stdio.h>
 #include <string.h>
@@ -64,6 +65,7 @@ int sic_init(char *dbarg)
 		return -1;
 
 	sic_plugin_init();
+	sic_plugin_reg(FEATPROC,sic_plugin_savepic);
 
 	return 0;
 }
@@ -191,7 +193,7 @@ static int genlist(char *imgfile,char *key,sic_item **si,int *n){
 	return 0;
 }
 
-int sic_matchlist(char *imgfile,char *key,sic_item **si,int topx){
+int sic_matchlist(char *imgfile,char *key,sic_item **si,int topx,char *destfile){
 	int n;	
 	if(!dao){
 		sic_log("Not inited");
