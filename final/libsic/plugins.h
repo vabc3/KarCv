@@ -30,8 +30,8 @@ typedef struct sic_plugin_chain_s
 	struct sic_plugin_chain_s *next;
 }sic_plugin_chain;
 
-int sic_plugin_init();
-int sic_plugin_end();
-int sic_plugin_reg(const sic_plugin_type type,void (*func)(void** const));
-int sic_plugin_process(const sic_plugin_type type,void *data);
+extern int sic_plugin_init();
+extern int sic_plugin_end();
+extern int sic_plugin_reg(const sic_plugin_type type,void (*func)(void** const));
+extern int sic_plugin_process(const sic_plugin_type type,void *data);
 #endif
