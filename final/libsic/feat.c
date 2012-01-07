@@ -22,7 +22,6 @@
 #include "kdtree.h"
 #include "util.h"
 #include "feat.h"
-#include "plugins.h"
 
 int intvls = SIFT_INTVLS;
 double sigma = SIFT_SIGMA;
@@ -48,8 +47,6 @@ int genfeature(const char *imgfile,s_feature **feature,int *n)
 	}
 	*n = _sift_features( img, feature, intvls, sigma, contr_thr, curv_thr,
 			img_dbl, descr_width, descr_hist_bins );
-
-	sic_plugin_process(1,&img);
 
 	cvReleaseImage(&img);
 	return 0;

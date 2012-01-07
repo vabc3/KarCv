@@ -19,8 +19,6 @@
 #include "feat.h"
 #include "util.h"
 #include "sic.h"
-#include "plugins.h"
-#include "plugins/proc.h"
 #include <sys/time.h>
 #include <stdio.h>
 #include <string.h>
@@ -64,16 +62,12 @@ int sic_init(char *dbarg)
 	if(!dao)
 		return -1;
 
-	sic_plugin_init();
-	sic_plugin_reg(FEATPROC,sic_plugin_savepic);
-
 	return 0;
 }
 
 int sic_end()
 {
 	sic_log("Sic End");
-	sic_plugin_end();
 	sic_dbdao_close(dao);
 	return 0;
 }
