@@ -21,7 +21,6 @@
 #include "sic.h"
 #include "plugins.h"
 #include "plugins/proc.h"
-#include <sys/time.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -30,18 +29,11 @@ static const char dirfile[]			= ".sic";
 static const char ftprefix[]		= "ft";
 static const char sqlite3_dbfile[]	= "db";
 static sic_dbdao* dao				= NULL;
-static int pc;		//添加文件数目统计
 static char fnbuf[255],dbdir[255];
 
 void sic_getver(char *st)
 {
 	sprintf(st,"%s version %s",PACKAGENAME,SICVERSION);
-}
-
-static void filename_gen(){
-	struct timeval tmv;
-	gettimeofday(&tmv,NULL);
-	sprintf(fnbuf,"si%lu.%lu.ft",tmv.tv_sec,tmv.tv_usec);
 }
 
 int sic_init(char *dbarg)
@@ -76,33 +68,56 @@ int sic_end()
 	return 0;
 }
 
+static int general_update()
+{
+	sic_dbitem *q,*p;
+	int n,i,count;
+	char fnbuf[STRMLEN];
+	char ebuf[255];
+
+	sic_log("Gener_update");
+	dao->query(NULL,&q,&n);
+	sic_log("Found %d items for update.",n);
+	count=n;
+	for(i=0;i<n;i++){
+		sic_log("Item id:%d",(q+i)->id);
+		sprintf(fnbuf,"%s%d.sift",ftprefix,(q+i)->id);
+		sic_log("%s",fnbuf);
+		sprintf(ebuf,"%s/%s",dbdir,fnbuf);
+		if(create_featurefile((q+i)->imagefile,ebuf)){
+			dao->delete((q+i)->id);
+			count--;
+		}else{
+			strncpy((q+i)->featurefile,fnbuf,STRMLEN);
+			dao->save((q+i));
+		}
+	}
+
+	return count;
+}
+
+static int insertdb(const char *imgfile,const char *desc)
+{
+	char tmp[STRMLEN];
+	sic_log("Ins %s(%s)",imgfile,desc);
+	realpath(imgfile,tmp);
+	sic_dbitem item;
+	make_sic_dbitem(&item,-1,tmp,"",desc);
+	if(dao->save(&item)){
+		return -1;
+	}
+	return 0;
+}
+
 int sic_insert(const char *imgfile,const char *desc)
 {
 	if(!dao){
 		sic_log("Not inited");
 		return -1;
 	}
-	sic_dbitem *item=(sic_dbitem*)calloc(1,sizeof(sic_dbitem));
-	sic_log("Ins %s(%s)",imgfile,desc);
-	filename_gen();
-	sic_log("%s",fnbuf);
-	char ebuf[255];
-	sprintf(ebuf,"%s/%s",dbdir,fnbuf);
-
-	if(create_featurefile(imgfile,ebuf)){
-		return -1;
-	}
-	char *tmp;
-	tmp	= realpath(imgfile,NULL);
-	
-	make_sic_dbitem(item,-1,tmp,fnbuf,desc);
-	free(tmp);
-	if(dao->save(item)){
-		return -1;
-	}
-	free(item);
+	insertdb(imgfile,desc);
 	sic_log("Insert success");
-	return 0;
+	return general_update();
 }
 
 int sic_cleardb()
@@ -137,7 +152,7 @@ static void fp(const char *st){
 
 	if(!check_imgfile(st,buf)){
 		sic_log("Desc:%s",buf);
-		if(!sic_insert(st,buf))pc++;
+		insertdb(st,buf);
 	}
 }
 
@@ -147,9 +162,8 @@ int sic_autoadd(char *dir){
 		return -1;
 	}
 	sic_log("自动添加：%s",dir);
-	pc=0;
 	process_file(dir,fp);	
-	return pc;
+	return general_update();
 }
 
 static int compar(const void *a,const void *b){

@@ -142,9 +142,7 @@ void insert()
 		printf("Path must be set.\n");
 		return;
 	}
-	if(sic_insert(op.path,op.key)){
-		printf("Insert error.\n");
-	}
+	printf("Inserted %d Files\n",sic_insert(op.path,op.key));
 }
 
 void import()

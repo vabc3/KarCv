@@ -36,14 +36,14 @@ static const char DB_INSERT[]	= "insert into sicdb"
 								"values('%s','%s','%s')";
 static const char DB_UPDATE[]	= "update sicdb set featurefile='%s' where id='%d'";
 static const char DB_KQUERY[]	= "select * from sicdb where description like '%%%s%%'";
-static const char DB_NQUERY[]	= "select * from sicdb where description=''";
+static const char DB_NQUERY[]	= "select * from sicdb where featurefile=''";
 static const char DB_DELETE[]	= "delete from sicdb where id='%d'";
 
 //static int query_cb(void *a,int b, char **c,char **d);
 
 int sic_sqlite3_open(const char *arg){
 	
-	sic_log("Open Called,Arg:%s",arg);
+	sic_log("Open Database,Arg:%s",arg);
 	
 	if(sqlite3_open(arg,&db)){
 		sic_log("DB_err:%s",sqlite3_errmsg(db));
@@ -61,7 +61,7 @@ int sic_sqlite3_open(const char *arg){
 }
 
 int sic_sqlite3_close(){
-	sic_log("Close Called");
+	sic_log("Close database");
 	return sqlite3_close(db);
 }
 
@@ -75,13 +75,15 @@ int sic_sqlite3_clear(){
 int sic_sqlite3_save(const sic_dbitem* item)
 {
 	char buf[512];
-	sic_log("Insert Called");
 	if(!item)
 		return -1;
-	if(item->id<0)
+	if(item->id<0){
+//		sic_log("Insert Called");
 		sprintf(buf,DB_INSERT,item->imagefile,item->featurefile,item->description);
-	else
+	}else{
+//		sic_log("Update Called");
 		sprintf(buf,DB_UPDATE,item->featurefile,item->id);
+	}
 	sqlite3_exec(db,buf,NULL,NULL,NULL);
 
 	return 0;
@@ -123,6 +125,7 @@ int sic_sqlite3_query(const char *key,sic_dbitem** const its,int *cou)
 int sic_sqlite3_delete(int id)
 {
 	char buf[512];
+	sic_log("Delete id->%d",id);
 	sprintf(buf,DB_DELETE,id);
     sqlite3_exec(db,buf,NULL,NULL,NULL);
 

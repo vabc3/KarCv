@@ -54,7 +54,7 @@ static void proc_file(const char *base,char *now,void (*pfunc)(const char *path)
 	sprintf(buf,"%s/%s",base,now);
 
 	if(is_file(buf)){	
-		sic_log("Processing %s",buf);
+//		sic_log("Processing %s",buf);
 		pfunc(buf);	
 	}else if(is_dir(buf)){
 		sic_log("Dir:  %s",buf);
