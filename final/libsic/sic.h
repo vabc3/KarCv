@@ -25,9 +25,9 @@ extern "C" {
 
 
 #define PACKAGENAME	"libsic"
-#define SICVERSION "0.1.1"
+#define SICVERSION "0.1.2"
 
-#define STRMLEN 128
+#define STRMLEN 256
 
 /*-----------------------------------------------------------------------------
  * item struct definition 

@@ -18,7 +18,9 @@
 
 #ifndef SICDBDAO_H
 #define SICDBDAO_H
-#define STRMLEN 128
+#ifndef STRMLEN
+#define STRMLEN 256
+#endif
 typedef struct sic_dbitem_s{
 	int id;							//ider
 	char imagefile[STRMLEN];        //image path

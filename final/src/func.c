@@ -143,7 +143,9 @@ void insert()
 		printf("Path must be set.\n");
 		return;
 	}
-	sic_insert(op.path,op.key);
+	if(sic_insert(op.path,op.key)){
+		printf("Insert error.\n");
+	}
 }
 
 void import()

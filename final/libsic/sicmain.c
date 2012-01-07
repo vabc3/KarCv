@@ -19,6 +19,7 @@
 #include "feat.h"
 #include "util.h"
 #include "sic.h"
+#include "plugins.h"
 #include <sys/time.h>
 #include <stdio.h>
 #include <string.h>
@@ -61,12 +62,16 @@ int sic_init(char *dbarg)
 	dao=sic_dbdao_init(SQLITE3,fnbuf);
 	if(!dao)
 		return -1;
+
+	sic_plugin_init();
+
 	return 0;
 }
 
 int sic_end()
 {
 	sic_log("Sic End");
+	sic_plugin_end();
 	sic_dbdao_close(dao);
 	return 0;
 }

@@ -1,11 +1,10 @@
 AM_CFLAGS	= `pkg-config --cflags opencv` -I..
-AM_LDFLAGS	= `pkg-config --libs sqlite3 opencv`
-LDADD		= -L../ -lsic
+LDADD		= ../libsic.la
 
 #tdb tbf tm tq ad
-bin_PROGRAMS = fd
+bin_PROGRAMS = plugc
 
-fd_DEPENDENCIES = ../libsic.a
-
-../libsic.a :
-		make -C ..
+plugc_DEPENDENCIES  = ../libsic.la
+plugc_LDFLAGS		= -static
+../libsic.la :
+		make -C .. $@
