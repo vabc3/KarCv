@@ -121,7 +121,6 @@ void version()
 
 void status()
 {
-//	int i,n;
 	sic_status* st = sic_getstatus();
 	if(st){
 		printf("现有%d条记录\n",st->count),free(st);
@@ -176,6 +175,5 @@ void match()
 	for(i=0;i<n;i++){
 		printf("%d. %.2f%%|%s\t|%s\t|\n",i+1,(si+i)->appo,(si+i)->description,(si+i)->imagefile);
 	}
-//	printf("Before free\n");
 	free(si);
 }
