@@ -95,7 +95,7 @@ int sic_insert(const char *imgfile,const char *desc)
 	char *tmp;
 	tmp	= realpath(imgfile,NULL);
 	
-	make_sic_dbitem(item,tmp,fnbuf,desc);
+	make_sic_dbitem(item,-1,tmp,fnbuf,desc);
 	free(tmp);
 	if(dao->save(item)){
 		return -1;

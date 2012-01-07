@@ -41,11 +41,12 @@ struct sic_dbdao_s{
 	int (*clear)();
 	int (*save)(const sic_dbitem* item);
 	int (*query)(const char *key,sic_dbitem** const its,int *count);
+	int (*delete)(const int id);
 };
 
 typedef struct sic_dbdao_s sic_dbdao;
 
-extern inline int make_sic_dbitem(sic_dbitem *item,const char *imagefile,
+extern inline int make_sic_dbitem(sic_dbitem *item,const int id,const char *imagefile,
 		const char *featurefile,const char * description);
 extern void dbitems_print(sic_dbitem **const,const int count);
 extern void dbitem_print(const sic_dbitem*);
