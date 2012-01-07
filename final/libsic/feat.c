@@ -18,9 +18,9 @@
 
 #include <cv.h>
 #include <highgui.h>
+#include "util.h"
 #include "sift.h"
 #include "kdtree.h"
-#include "util.h"
 #include "feat.h"
 #include "plugins.h"
 
