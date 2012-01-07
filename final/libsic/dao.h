@@ -24,7 +24,7 @@
 typedef struct sic_dbitem_s{
 	int id;							//ider
 	char imagefile[STRMLEN];        //image path
-	char featurefile[STRMLEN];      //feature file path
+	char featurefile[STRMLEN];      //feature file
 	char description[STRMLEN];      //description
 } sic_dbitem;
 

@@ -29,10 +29,9 @@
 static const char dirfile[]			= ".sic";
 static const char ftprefix[]		= "ft";
 static const char sqlite3_dbfile[]	= "db";
-
-static sic_dbdao* dao=NULL;
+static sic_dbdao* dao				= NULL;
+static int pc;		//添加文件数目统计
 static char fnbuf[255],dbdir[255];
-
 
 void sic_getver(char *st)
 {
@@ -49,7 +48,7 @@ int sic_init(char *dbarg)
 {
 	sic_log("Sic Init");
 
-	char dw[255];
+	char dw[STRMLEN];
 	if(!dbarg){
 		strcpy(dw,getenv("HOME"));
 	}else{
@@ -57,7 +56,6 @@ int sic_init(char *dbarg)
 	}
 
 	sprintf(dbdir,"%s/%s",dw,dirfile);
-
 	make_dir(dbdir);
 	sprintf(fnbuf,"%s/%s",dbdir,sqlite3_dbfile);
 	dao=sic_dbdao_init(SQLITE3,fnbuf);
@@ -106,7 +104,7 @@ int sic_insert(const char *imgfile,const char *desc)
 	sic_log("Insert success");
 	return 0;
 }
-	
+
 int sic_cleardb()
 {
 	if(!dao){
@@ -133,7 +131,6 @@ sic_status* sic_getstatus()
 	rt->count=n;
 	return rt;
 }
-static int pc;
 
 static void fp(const char *st){
 	char buf[255];
@@ -156,7 +153,6 @@ int sic_autoadd(char *dir){
 }
 
 static int compar(const void *a,const void *b){
-//	sic_log("%s vs %s",(((sic_item*)a)->dbitem->imagefile,((sic_item*)b)->dbitem->imagefile));
 	return (((sic_item*)a)->appo<((sic_item*)b)->appo);
 }
 
@@ -177,7 +173,7 @@ static int genlist(char *imgfile,char *key,sic_item **si,int *n){
 	nf=compare_feature(base_f,nb,base_f,nb);
 	*si=(sic_item*)malloc(cou*sizeof(sic_item));
 
-	char ff[266];
+	char ff[STRMLEN];
 
 	for(i=0;i<cou;i++){
 		strncpy((*si+i)->imagefile,(its+i)->imagefile,STRMLEN);
