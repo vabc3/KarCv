@@ -18,7 +18,6 @@
 
 #include "func.h"
 #include "arg.h"
-sic_opt op;
 
 int main(int argc,char **argv){
 	
