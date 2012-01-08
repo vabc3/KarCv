@@ -22,9 +22,8 @@
 #include "util.h"
 #include "plugins/pall.h"
 #include "dao.h"
-#include "feat.c"
 
-int sic_imgopen(char* imgfile,IplImage** img)
+int srv_imgopen(char* imgfile,IplImage** img)
 {
 	if(!imgfile){
 		sic_log("name NULL");
@@ -38,16 +37,18 @@ int sic_imgopen(char* imgfile,IplImage** img)
 	}
 	IplImage *out;
 
-	pfix_run(*img,&out);
+	pfix_img(*img,&out);
 	*img	= out;
-	show("r",*img);
-	cvWaitKey(0);
+//	show("r",*img);
+//	cvWaitKey(0);
 	return 0;
 }
 
-int sic_genfeat(IplImage* img,char* featkey)
+int srv_genfeat(IplImage* img,char* featkey)
 {
-	pfeat_run(img);
+	void *feat;
+	pfeat_gen(img,&feat);
+	pfeat_save(feat,featkey);
 	return 0;	
 }
 
@@ -105,15 +106,15 @@ int srv_general_update()
 	count=n;
 	for(i=0;i<n;i++){
 		sic_log("Item id:%d",(q+i)->id);
-		sprintf(fnbuf,"%s%d.sift",ftprefix,(q+i)->id);
+		sprintf(fnbuf,"%s%d",ftprefix,(q+i)->id);
 		sic_log("%s",fnbuf);
 		sprintf(ebuf,"%s/%s",dbdir,fnbuf);
 		IplImage *img;
-		if(sic_imgopen((q+i)->imagefile,&img)){
+		if(srv_imgopen((q+i)->imagefile,&img)){
 			dao->delete((q+i)->id);
 			count--;
 		}else{
-			sic_genfeat(img,fnbuf);
+			srv_genfeat(img,ebuf);
 			strncpy((q+i)->featurefile,fnbuf,STRMLEN);
 			dao->save((q+i));
 		}
@@ -158,21 +159,20 @@ int srv_getstatus(sic_status** sts)
 
 int srv_genlist(char *imgfile,char *key,sic_item **si,int *n)
 {
-
-	s_feature *base_f,*each_f;
-	int nb,nf,cou,i,ne;
+	void *base_f,*each_f;
+	int cou,i,ne;
 
 	sic_dbitem* its;
 	sic_log("列表");
 
-	if(genfeature(imgfile,&base_f,&nb)){
+	IplImage *img;
+	if(srv_imgopen(imgfile,&img)){
 		return -1;
 	}
-
-	nf=compare_feature(base_f,nb,base_f,nb);
+	pfeat_gen(img,&base_f);
+	
 	dao->query(key,&its,&cou);
 
-	nf=compare_feature(base_f,nb,base_f,nb);
 	*si=(sic_item*)malloc(cou*sizeof(sic_item));
 
 	char ff[STRMLEN];
@@ -181,12 +181,13 @@ int srv_genlist(char *imgfile,char *key,sic_item **si,int *n)
 		strncpy((*si+i)->imagefile,(its+i)->imagefile,STRMLEN);
 		strncpy((*si+i)->description,(its+i)->description,STRMLEN);
 		sprintf(ff,"%s/%s",dbdir,(its+i)->featurefile);
-		load_feature(ff,&each_f,&ne);
-		(*si+i)->appo   =(float) 100.0 * compare_feature(base_f,nb,each_f,ne) / nf ;
+		pfeat_load(ff,&each_f);
+		(*si+i)->appo   = pfeat_cmp(base_f,each_f)*100;
 		free(each_f);
 	}
 	*n=cou;
 	free(base_f);
 	free(its);
+	
 	return 0;
 }

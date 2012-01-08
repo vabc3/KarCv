@@ -20,18 +20,18 @@
 #include <cv.h>
 #include "sic.h"
 
-int sic_imgopen(char* imgfile,IplImage** img);
-int sic_genfeat(IplImage* img,char* featkey);
 float sic_compfeat(IplImage* img,char* featkey);
 
-int srv_dbinit(char* dbarg);
-int srv_plugininit();
-int srv_dbend();
-int srv_pluginend();
-int srv_general_update();
-int srv_insertdb(const char *imgfile,const char *desc);
-int srv_cleardb();
-int srv_getstatus(sic_status**);
-int srv_genlist(char *imgfile,char *key,sic_item **si,int *n);
+extern int srv_genfeat(IplImage* img,char* featkey);
+extern int srv_imgopen(char* imgfile,IplImage** img);
+extern int srv_dbinit(char* dbarg);
+extern int srv_plugininit();
+extern int srv_dbend();
+extern int srv_pluginend();
+extern int srv_general_update();
+extern int srv_insertdb(const char *imgfile,const char *desc);
+extern int srv_cleardb();
+extern int srv_getstatus(sic_status**);
+extern int srv_genlist(char *imgfile,char *key,sic_item **si,int *n);
 
 #endif

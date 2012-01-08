@@ -16,9 +16,11 @@
  * =====================================================================================
  */
 #include "imgfeatures.h"
-typedef struct feature sift_feat;
+typedef struct feature s_feature;
 typedef struct siftf
 {
 	int n;
-	sift_feat feat;
+	s_feature* feat;
 }sic_sift;
+
+extern sicpfeat psift;

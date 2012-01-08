@@ -18,8 +18,45 @@
 
 #ifndef SIC_PALL_H
 #define SIC_PALL_H
-#include "pfeat.h"
-#include "pfix.h"
+#include <cv.h>
+
+#define PFIX		1
+#define PFEATGEN	(1<<1)
+#define PFEATSAV	(1<<2)
+#define PFEATLOD	(1<<3)
+#define PFEATCMP	(1<<4)
+#define PFEAT		(PFEATGEN|PFEATSAV|PFEATLOD|PFEATCMP)
+
 extern int sic_pall_init();
 extern int sic_pall_end();
+
+typedef struct sic_plugin_feat_s
+{
+	int index;
+	float prop;
+	int (*generate)(IplImage*,void**);
+	int (*save)(void*,char*);
+	int (*load)(char*,void**);
+	float (*compare)(void*,void*);
+}sicpfeat;
+
+
+typedef struct pfeat_save_arg_s
+{
+	char* featkey;
+	void* data;
+}pfeat_save_arg;
+
+
+
+extern void pfeat_init();
+extern void pfeat_gen(IplImage *img,void**);
+extern void pfeat_save(void *feat,char *fkey);
+extern void pfeat_load(char *fkey,void **feat);
+extern float pfeat_cmp(void *f1,void *f2);
+
+
+extern void pfix_init();
+extern void pfix_img(IplImage *in,IplImage **out);
+
 #endif

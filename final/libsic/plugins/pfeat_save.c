@@ -16,11 +16,12 @@
  * =====================================================================================
  */
 
-#include "plugins.h"
-#include "util.h"
 #include <cv.h>
 #include <highgui.h>
-#include "pfeat.h"
+#include <stdio.h>
+#include "plugins.h"
+#include "util.h"
+#include "pall.h"
 
 static int generate(IplImage *img,void **out)
 {
@@ -28,18 +29,20 @@ static int generate(IplImage *img,void **out)
 	*out=(void*)img;
 	return 0;
 }
- 
 
-static int save(void* data,char *fn)
+static int save(void* data,char* fn)
 {
-	sic_log("Plugin Save,%d",data);
+	sic_log("save in save,%d(%s)",data,fn);
 	IplImage* img;
+	char buf[512];
+	sprintf(buf,"%s.jpg",fn);
 	img	= (IplImage*)(data);
-	cvSaveImage("/tmp/test.jpg",img,NULL);
+	show("x",img);
+	cvSaveImage(buf,img,NULL);
 	return 0;
 }
 
 sicpfeat psave={
-0.9,generate,save,NULL,NULL
+0,0.5,generate,save,NULL,NULL
 };
 

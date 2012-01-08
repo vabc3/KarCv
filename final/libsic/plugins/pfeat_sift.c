@@ -18,9 +18,11 @@
 
 #include <cv.h>
 #include <highgui.h>
+#include <stdio.h>
 #include "util.h"
 #include "sift.h"
 #include "kdtree.h"
+#include "pall.h"
 #include "psift.h"
 
 int intvls = SIFT_INTVLS;
@@ -31,64 +33,71 @@ int img_dbl = SIFT_IMG_DBL;
 int descr_width = SIFT_DESCR_WIDTH;
 int descr_hist_bins = SIFT_DESCR_HIST_BINS;
 
+static int genfeature(IplImage *img,void **out);
+static int save(void *data,char *fn);
+static int load(char *fn,void **data);
+static float comp(void* feat1,void* feat2);
 
-int genfeature(const char *imgfile,s_feature **feature,int *n)
+sicpfeat psift={
+1,1,genfeature,save,load,comp
+};
+
+static int genfeature(IplImage *img,void **out)
 {
-	IplImage *img;
-
-	if(!imgfile){
-		sic_log("name NULL");
-		return -1;
-	}
-	sic_log("Gen Feature:%s",imgfile);
-	img = cvLoadImage( imgfile, 1 );
-	if(!img){
-		sic_log("Img error");
-		return -1;
-	}
-	*n = _sift_features( img, feature, intvls, sigma, contr_thr, curv_thr,
-			img_dbl, descr_width, descr_hist_bins );
-
-	cvReleaseImage(&img);
-	return 0;
-}
-
-s_feature *fe;
-
-int create_featurefile(const char *imgfile,const char *featurefile){
+	sic_log("generate in sift");
 	int n;
-	if(genfeature(imgfile,&fe,&n))
-		return -1;
-	save_feature(featurefile,fe,n);
-	free(fe);
+	s_feature *feat;
+	n = _sift_features( img, &feat, intvls, sigma, contr_thr, curv_thr,
+			img_dbl, descr_width, descr_hist_bins );
+	sic_log("n=%d",n);
+	sic_sift *sf=(sic_sift*)malloc(sizeof(sic_sift));
+
+	sf->n=n;
+	sf->feat=feat;
+	*out = (void*)sf;
 	return 0;
 }
 
-int load_feature(char *featurefile,s_feature **feature,int *n)
+static int save(void *data,char *fn)
 {
-	struct feature* feat=NULL;
+	sic_log("save in sift");	
+	sic_sift *sf	=(sic_sift*)data;
 
-	if(!featurefile){
+	char buf[512];
+    sprintf(buf,"%s.sift",fn);
+	
+	sic_log("SaveFeatTo:%s",buf);
+
+	export_features(buf,sf->feat,sf->n);
+	return 0;
+}
+
+static int load(char *fn,void **data)
+{
+	sic_sift *sf=NULL;
+	*data=NULL;
+	struct feature* feat=NULL;
+	int n;
+	if(!fn){
 		sic_log("name NULL");
 		return -1;
 	}
-	sic_log("LoadFeatFrom:%s",featurefile);
-	*n = import_features( featurefile, FEATURE_LOWE, &feat );
-	if(*n==-1){
-		*feature=NULL;
+	char buf[512];
+    sprintf(buf,"%s.sift",fn);
+	sic_log("LoadFeatFrom:%s",buf);
+	n = import_features( buf, FEATURE_LOWE, &feat );
+	if(n==-1){
 		sic_log("Feat import error");
 		return -1;
 	}
-	*feature=feat;
+	sf=(sic_sift*)malloc(sizeof(sic_sift));
+	sf->n=n;
+	sf->feat=feat;
+	sic_log("load in sift:n=%d",n);
+	*data=sf;
 	return 0;
 }
 
-int save_feature(const char *featurefile,s_feature *feature,int n)
-{
-	sic_log("SaveFeatTo:%s",featurefile);
-	export_features(featurefile,feature,n);
-	return 0;
-}
 
 /* the maximum number of keypoint NN candidates to check during BBF search */
 #define KDTREE_BBF_MAX_NN_CHKS 200
@@ -96,10 +105,19 @@ int save_feature(const char *featurefile,s_feature *feature,int n)
 /* threshold on squared ratio of distances between NN and 2nd NN */
 #define NN_SQ_DIST_RATIO_THR 0.49
 
-
-int compare_feature(s_feature *feat1,int n1,s_feature *feat2,int n2)
+static float comp(void *f1,void* f2)
 {	
 	sic_log("比较特征");
+	sic_sift *sf1,*sf2;
+
+	s_feature *feat1,*feat2;
+	int n1,n2;
+
+	sf1=(sic_sift*)f1;
+	sf2=(sic_sift*)f2;
+	feat1=sf1->feat;feat2=sf2->feat;
+	n1=sf1->n;n2=sf2->n;
+	
 
 	int i,k,m = 0;
 	s_feature **nbrs,*feat;
@@ -132,7 +150,6 @@ int compare_feature(s_feature *feat1,int n1,s_feature *feat2,int n2)
 	}
 	kdtree_release(kd_root);
 	sic_log("结果%d",m);
-	return m;
+	return 1.0*m/n1;
 }
-
 

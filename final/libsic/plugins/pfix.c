@@ -16,40 +16,51 @@
  * =====================================================================================
  */
 
-#include "pfix.h"
+#include "pall.h"
 #include "plugins.h"
-static void sic_foo(IplImage*,IplImage**);
+#include "util.h"
+
+typedef void (procpfix)(IplImage *in,IplImage **out);
+
+static void sic_foo(IplImage*in,IplImage**out)
+{
+	sic_log("foo0");
+//	cvLine(in,cvPoint(0,3),cvPoint(20,80),CV_RGB(0,0,255),1,CV_AA,0);
+	*out=in;
+}
 static void sic_foo2(IplImage*in,IplImage**out)
 {
 	cvLine(in,cvPoint(70,3),cvPoint(20,80),CV_RGB(0,0,255),1,CV_AA,0);
 	*out=in;
 }
 
+static void sic_plugin_pfix(void* item,void* input,void** output);
+
 void pfix_init()
 {
-	sic_plugin_regproc(1,sic_plugin_pfix);
-	sic_plugin_regitem(1,sic_foo);
-	sic_plugin_regitem(1,sic_foo2);
+	sic_plugin_regproc(PFIX,sic_plugin_pfix);
+	sic_plugin_regitem(PFIX,sic_foo);
+//	sic_plugin_regitem(PFIX,sic_foo2);
 }
 
-void pfix_run(IplImage *in,IplImage **out)
+void pfix_img(IplImage *in,IplImage **out)
 {
 	void *o;
-	sic_plugin_process(1,NULL,in,&o);
+	o=NULL;
+	sic_plugin_process(PFIX,in,&o);
 	*out=(IplImage*)o;
 }
 
-void sic_plugin_pfix(void* item,void* input,void *med,void** output)
+static void sic_plugin_pfix(void* item,void* input,void** output)
 {
 	procpfix *pf	= (procpfix*)item;
-	IplImage *in	= (IplImage*)med;
+	IplImage *in;
+	if(*output==NULL)
+		in	= (IplImage*)input;
+	else
+		in 	= (IplImage*)(*output);
 	IplImage *ou;
 	pf(in,&ou);
 	*output			= (void*)ou;
 }
 
-void sic_foo(IplImage *in,IplImage **out)
-{
-	cvLine(in,cvPoint(0,3),cvPoint(20,80),CV_RGB(0,0,255),1,CV_AA,0);
-	*out=in;
-}

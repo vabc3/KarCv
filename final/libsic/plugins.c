@@ -20,9 +20,17 @@
 #include "util.h"
 #include <stdlib.h>
 
+
+const char plugname[][255]={"OPEN","GEN","SAVE","LOD","COMP"};
+
+static inline int jis(int t)
+{
+	return log(t)/log(2);
+}
+
 static sic_plugin_chain* head;
 static sic_plugin_chain* tail;
-sic_plugin_proc* funcs[4];
+sic_plugin_proc* funcs[7];
 
 int sic_plugin_init()
 {
@@ -60,20 +68,19 @@ int sic_plugin_regitem(const int type,void *item)
 
 int sic_plugin_regproc(const int type,sic_plugin_proc* func)
 {
-	sic_log("***PLUGIN REGPROC***");
+	sic_log("***PLUGIN REGPROC{%s}***",plugname[jis(type)]);
 	funcs[type]=func;
 	return 0;
 }
 
-int sic_plugin_process(const int type,void *input,void *med,void **output)
+int sic_plugin_process(const int type,void *input,void **output)
 {
-	sic_log("***PLUGIN PROC{%d}***",type);
+	sic_log("***PLUGIN PROC{%s}***",plugname[jis(type)]);
 	sic_plugin_chain* p;
 	p 	= head->next;
 	while(p!=tail){
 		if(type&(p->type)){
-			funcs[type](p->item,input,med,output);
-			med=*output;
+			funcs[type](p->item,input,output);
 		}
 		p	= p->next;
 	}
