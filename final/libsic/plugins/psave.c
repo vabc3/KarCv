@@ -25,7 +25,7 @@
 static int generate(IplImage *img,void **out)
 {
 	sic_log("generate in save,%d",img);
-	o=(void*)img;
+	*out=(void*)img;
 	return 0;
 }
  
