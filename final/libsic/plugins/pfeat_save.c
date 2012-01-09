@@ -37,7 +37,7 @@ static int save(void* data,char* fn)
 	char buf[512];
 	sprintf(buf,"%s.jpg",fn);
 	img	= (IplImage*)(data);
-	show("x",img);
+//	show("x",img);
 	cvSaveImage(buf,img,NULL);
 	return 0;
 }

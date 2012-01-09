@@ -22,6 +22,9 @@
 
 extern void debugon();
 extern void sic_log_f(const char *filename,const unsigned int,const char *fmt,...);
+extern void sic_process_begin(int);
+extern void sic_process_call(int,char*);
+extern void sic_process_end();
 
 extern int is_dir(const char *name);
 extern int is_file(const char *name);

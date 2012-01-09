@@ -1,3 +1,0 @@
-./siftfeat -x yks1.jpg  9.04s user 0.29s system 96% cpu 9.613 total
-./siftfeat -x yks1.jpg  9.09s user 0.27s system 94% cpu 9.933 total
-./siftfeat -x yks1.jpg  8.97s user 0.30s system 96% cpu 9.627 total

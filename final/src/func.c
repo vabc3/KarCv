@@ -163,9 +163,9 @@ void match()
 		return;
 	}
 	if(!op.key){
-		n=sic_matchlist(op.path,"",&si,-1,NULL);
+		n=sic_matchlist(op.path,"",&si,10,NULL);
 	}else
-		n=sic_matchlist(op.path,op.key,&si,-1,NULL);
+		n=sic_matchlist(op.path,op.key,&si,10,NULL);
 
 	if(n<0){
 		printf("Image error!\n");

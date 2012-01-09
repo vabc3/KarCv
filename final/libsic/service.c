@@ -104,7 +104,9 @@ int srv_general_update()
 	dao->query(NULL,&q,&n);
 	sic_log("Found %d items for update.",n);
 	count=n;
+	sic_process_begin(n);
 	for(i=0;i<n;i++){
+		sic_process_call(i,"update");
 		sic_log("Item id:%d",(q+i)->id);
 		sprintf(fnbuf,"%s%d",ftprefix,(q+i)->id);
 		sic_log("%s",fnbuf);
@@ -119,6 +121,7 @@ int srv_general_update()
 			dao->save((q+i));
 		}
 	}
+	sic_process_end();
 
 	return count;
 
@@ -177,7 +180,9 @@ int srv_genlist(char *imgfile,char *key,sic_item **si,int *n)
 
 	char ff[STRMLEN];
 
+	sic_process_begin(cou);
 	for(i=0;i<cou;i++){
+		sic_process_call(i,"x");
 		strncpy((*si+i)->imagefile,(its+i)->imagefile,STRMLEN);
 		strncpy((*si+i)->description,(its+i)->description,STRMLEN);
 		sprintf(ff,"%s/%s",dbdir,(its+i)->featurefile);
@@ -185,6 +190,7 @@ int srv_genlist(char *imgfile,char *key,sic_item **si,int *n)
 		(*si+i)->appo   = pfeat_cmp(base_f,each_f)*100;
 		free(each_f);
 	}
+	sic_process_end();
 	*n=cou;
 	free(base_f);
 	free(its);
