@@ -34,6 +34,7 @@ extern "C" {
 typedef struct sic_item_s			//返回信息结构
 {
     char 	imagefile[STRMLEN];		//image path
+	char 	feat[STRMLEN];
     char 	description[STRMLEN];	//description
 	float	appo;					//相似度
 } sic_item;

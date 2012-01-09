@@ -59,7 +59,7 @@ void sic_process_begin(int n)
 
 	if(proc){
 		pc=n;la=0;
-		printf("Processing...(  0,%3d)",pc);
+		printf("Processing...(  0,%3d) ",pc);
 	}
 }
 
@@ -78,9 +78,9 @@ void sic_process_call(int i,char *s)
 void sic_process_end()
 {
 	char buf[255];
-	sprintf(buf,"\033[%dDDone!        \n",la+10);
 	if(proc){
-		printf("\033[9DDone!        \n");
+		sprintf(buf,"\033[%dDDone!        \n",la+10);
+		printf(buf,"");
 	}
 }
 

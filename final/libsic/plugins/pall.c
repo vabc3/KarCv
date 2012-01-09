@@ -24,6 +24,7 @@ int sic_pall_init()
 	sic_plugin_init();
 	pfix_init();
 	pfeat_init();
+	pdoc_init();
 
 	return 0;
 }

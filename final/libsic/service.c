@@ -39,8 +39,8 @@ int srv_imgopen(char* imgfile,IplImage** img)
 
 	pfix_img(*img,&out);
 	*img	= out;
-//	show("r",*img);
-//	cvWaitKey(0);
+	//	show("r",*img);
+	//	cvWaitKey(0);
 	return 0;
 }
 
@@ -173,7 +173,7 @@ int srv_genlist(char *imgfile,char *key,sic_item **si,int *n)
 		return -1;
 	}
 	pfeat_gen(img,&base_f);
-	
+
 	dao->query(key,&its,&cou);
 
 	*si=(sic_item*)malloc(cou*sizeof(sic_item));
@@ -184,6 +184,7 @@ int srv_genlist(char *imgfile,char *key,sic_item **si,int *n)
 	for(i=0;i<cou;i++){
 		sic_process_call(i,"x");
 		strncpy((*si+i)->imagefile,(its+i)->imagefile,STRMLEN);
+		strncpy((*si+i)->feat,(its+i)->featurefile,STRMLEN);
 		strncpy((*si+i)->description,(its+i)->description,STRMLEN);
 		sprintf(ff,"%s/%s",dbdir,(its+i)->featurefile);
 		pfeat_load(ff,&each_f);
@@ -194,6 +195,53 @@ int srv_genlist(char *imgfile,char *key,sic_item **si,int *n)
 	*n=cou;
 	free(base_f);
 	free(its);
-	
+
 	return 0;
 }
+
+
+void sic_genhtml(char *imgfile,sic_item *si,int n)
+{
+	sic_log("Gen html Called");
+
+
+	void *base_f,*each_f;
+
+	IplImage *img;
+	if(srv_imgopen(imgfile,&img)){
+		return;
+	}
+	pfeat_gen(img,&base_f);
+
+	int i;
+	char *out;
+	char ff[STRMLEN];
+
+	char base[]="/tmp";
+	char fn[]="index.htm";
+
+	char hn[255];
+	sprintf(hn,"%s/%s",base,fn);
+	FILE* fp=fopen(hn,"w");
+
+	char bp[255];
+
+	fprintf(fp,"<h3>图像文件:%s</h3>\n",imgfile);
+	fprintf(fp,"<img src=\"%s\"/>\n",imgfile);
+	for(i=0;i<n;i++){
+		fprintf(fp,"<p>%d.[%.2f%%],%s,%s</p>\n",i+1,
+				(si+i)->appo,(si+i)->description,(si+i)->imagefile);
+
+		sic_log((si+i)->feat);
+		sprintf(ff,"%s/%s",dbdir,(si+i)->feat);
+		fprintf(fp,"<img src=\"%s.jpg\"/>\n",ff);
+		pfeat_load(ff,&each_f);
+
+		sprintf(bp,"%s/im%d",base,i+1);
+		pdoc_html(base_f,each_f,bp,&out);
+
+		fprintf(fp,"%s\n",out);free(out);
+	}
+	fclose(fp);
+}
+

@@ -80,6 +80,7 @@ static int compar(const void *a,const void *b){
 	return (((sic_item*)a)->appo<((sic_item*)b)->appo);
 }
 
+
 int sic_matchlist(char *imgfile,char *key,sic_item **si,int topx,char *destfile){
 	int n;	
 	
@@ -94,6 +95,8 @@ int sic_matchlist(char *imgfile,char *key,sic_item **si,int topx,char *destfile)
 		n=topx;
 		*si=realloc(*si,n*sizeof(sic_item));
 	}
+
+	sic_genhtml(imgfile,*si,n);
 
 	return n;
 }

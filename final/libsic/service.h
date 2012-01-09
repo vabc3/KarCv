@@ -33,5 +33,6 @@ extern int srv_insertdb(const char *imgfile,const char *desc);
 extern int srv_cleardb();
 extern int srv_getstatus(sic_status**);
 extern int srv_genlist(char *imgfile,char *key,sic_item **si,int *n);
+extern void sic_genhtml(char *img,sic_item *si,int n);
 
 #endif

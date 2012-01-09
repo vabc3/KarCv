@@ -21,7 +21,7 @@
 #include <stdlib.h>
 
 
-const char plugname[][255]={"OPEN","GEN","SAVE","LOD","COMP"};
+const char plugname[][255]={"OPEN","GEN","SAVE","LOD","COMP","DOC"};
 
 static inline int jis(int t)
 {

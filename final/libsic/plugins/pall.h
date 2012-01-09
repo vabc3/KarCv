@@ -25,7 +25,8 @@
 #define PFEATSAV	(1<<2)
 #define PFEATLOD	(1<<3)
 #define PFEATCMP	(1<<4)
-#define PFEAT		(PFEATGEN|PFEATSAV|PFEATLOD|PFEATCMP)
+#define PDOC		(1<<5)
+#define PFEAT		(PFEATGEN|PFEATSAV|PFEATLOD|PFEATCMP|PDOC)
 
 extern int sic_pall_init();
 extern int sic_pall_end();
@@ -38,6 +39,7 @@ typedef struct sic_plugin_feat_s
 	int (*save)(void*,char*);
 	int (*load)(char*,void**);
 	float (*compare)(void*,void*);
+	char* (*gendoc)(void*,void*,char*);
 }sicpfeat;
 
 
@@ -46,7 +48,6 @@ typedef struct pfeat_save_arg_s
 	char* featkey;
 	void* data;
 }pfeat_save_arg;
-
 
 
 extern void pfeat_init();
@@ -58,5 +59,8 @@ extern float pfeat_cmp(void *f1,void *f2);
 
 extern void pfix_init();
 extern void pfix_img(IplImage *in,IplImage **out);
+
+extern void pdoc_init();
+extern void pdoc_html(void *f1,void *f2,char* base,char** text);
 
 #endif

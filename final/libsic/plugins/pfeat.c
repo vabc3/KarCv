@@ -19,6 +19,7 @@
 #include "pall.h"
 #include "psift.h"
 #include "psave.h"
+#include "phist.h"
 #include "plugins.h"
 #include <stdlib.h>
 
@@ -99,9 +100,10 @@ static void proccmp(void*item,void* input,void** output)
 
 	js=pf->prop * pf->compare(*(f1+pf->index),*(f2+pf->index));
 		
-	if(*output==NULL)
+	if(*output==NULL){
 		*output=malloc(sizeof(float));
-
+		*(float*)*output=0;
+	}
 	p=(float*)*output;
 	*p+=js;
 }
@@ -127,6 +129,7 @@ void pfeat_init()
 	sic_plugin_regproc(PFEATSAV,procsave);
 	sic_plugin_regproc(PFEATLOD,procload);
 	sic_plugin_regproc(PFEATCMP,proccmp);
+	sic_plugin_regitem(PFEAT,(void*)&phist);
 	sic_plugin_regitem(PFEAT,(void*)&psift);
 	sic_plugin_regitem(PFEATGEN|PFEATSAV,(void*)&psave);
 }
