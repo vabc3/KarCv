@@ -29,6 +29,7 @@ typedef struct opt_s{
 	char *path;
 	char *key;
 	char *dbarg;
+	char *outp;
 	int showlist;
 }sic_opt;
 

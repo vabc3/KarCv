@@ -31,17 +31,23 @@ static void procdoc(void*item,void* input,void** output)
 {
 	
 	sicpfeat *pf        = (sicpfeat*) item;
+	
+	IplImage* img;
+	char *dir,*prefix,*feat;
+	
+	void **tf,**f1;
+	void* f2;
 
-	void **tf,**f1,**f2;
-	char *ba;
-
-	tf  = (void**)input;
-	f1  = (void**)*(tf);
-	f2  = (void**)*(tf+1);
-	ba	= (char*)*(tf+2);
+	tf  	= (void**)input;
+	img  	= (IplImage*)*(tf);
+	f1		= (void**)*(tf+1);
+	f2		= *(f1+pf->index);
+	feat  	= (char*)*(tf+2);
+	dir		= (char*)*(tf+3);
+	prefix	= (char*)*(tf+4);
 
 	char *doc	= (char*)*output;
-	char *docx	= pf->gendoc(*(f1+pf->index),*(f2+pf->index),ba);
+	char *docx	= pf->gendoc(img,f2,feat,dir,prefix);
 	int l		= strlen(doc);
 	int lx		= strlen(docx);
 	doc			= realloc(doc,l+lx+2);
@@ -50,16 +56,19 @@ static void procdoc(void*item,void* input,void** output)
 	*output		= doc;
 }
 
-void pdoc_html(void* f1,void* f2,char* base,char** text)
+void pdoc_html(IplImage* f1,void* f2,char *feat,char* dir,char* prefix,char** text)
 {
-	sic_log("base is %s",base);
+	sic_log("base is %s,%s",dir,prefix);
 	void *o=(char*)malloc(5);
 	strncpy(o,"\0",5);
-	void** in=(void**)malloc(3*sizeof(void*));
+	void** in=(void**)malloc(5*sizeof(void*));
+
 	*in=f1;
 	*(in+1)=f2;
+	*(in+2)=feat;
+	*(in+3)=dir;
+	*(in+4)=prefix;
 
-	*(in+2)=base;
 
 	sic_plugin_process(PDOC,in,&o);
 

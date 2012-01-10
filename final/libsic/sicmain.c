@@ -96,7 +96,8 @@ int sic_matchlist(char *imgfile,char *key,sic_item **si,int topx,char *destfile)
 		*si=realloc(*si,n*sizeof(sic_item));
 	}
 
-	sic_genhtml(imgfile,*si,n);
+	if(is_dir(destfile))
+		sic_genhtml(imgfile,*si,n,destfile);
 
 	return n;
 }
@@ -105,5 +106,3 @@ void sic_debug()
 {
 	debugon();
 }
-
-

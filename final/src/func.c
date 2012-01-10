@@ -163,12 +163,13 @@ void match()
 		return;
 	}
 	if(!op.key){
-		n=sic_matchlist(op.path,"",&si,10,NULL);
+		n=sic_matchlist(op.path,"",&si,10,op.outp);
 	}else
-		n=sic_matchlist(op.path,op.key,&si,10,NULL);
+		n=sic_matchlist(op.path,op.key,&si,10,op.outp);
 
 	if(n<0){
 		printf("Image error!\n");
+		return;
 	}
 	for(i=0;i<n;i++){
 		printf("%d. %.2f%%|%s\t|%s\t|\n",i+1,(si+i)->appo,(si+i)->description,(si+i)->imagefile);

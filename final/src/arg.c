@@ -36,9 +36,10 @@ static struct option lop[] ={
 	{"help",	no_argument,		0, 'h'},
 	{"dbdir",	no_argument,		0, 'b'},
 	{"topn",	required_argument,	0, 'n'},
+	{"outputf",	required_argument,	0, 'f'},
 	{0,0,0,0}
 };
-static char sop[]="dvsciomlp:k:hbn";
+static char sop[]="dvsciomlp:k:hbnf:";
 
 sic_opt op;
 
@@ -68,6 +69,7 @@ void parse_opt(int argc,char **argv)
 	op.dbarg	= NULL;
 	op.path		= NULL;
 	op.key		= NULL;
+	op.outp		= NULL;
 	op.showlist	= 0;
 	do{
 		c= getopt_long(argc,argv,sop,lop,NULL);
@@ -107,6 +109,8 @@ void parse_opt(int argc,char **argv)
 				setcmd(Chelp);
 			case 'b':
 				op.dbarg=optarg;
+			case 'f':
+				op.outp=optarg;
 			default:
 				break;
 		}

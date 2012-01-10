@@ -37,16 +37,15 @@ static int genfeature(IplImage *img,void **out);
 static int save(void *data,char *fn);
 static int load(char *fn,void **data);
 static float comp(void* feat1,void* feat2);
-static char* gendoc(void* f1,void* f2,char* base);
+static char* gendoc(IplImage* img,void* data,char* featkey,char* dir,char* prefix);
 
 sicpfeat psift={
 	1,.9,genfeature,save,load,comp,gendoc
 };
 
-static char* gendoc(void* f1,void* f2,char* base)
+static char* gendoc(IplImage* img,void* data,char* featkey,char* dir,char* prefix)
 {
-	sic_log("sift->gendoc base:%s",base);
-
+/*	sic_log("sift->gendoc base:%s",base);
 	char buf[255];
 	float ft=comp(f1,f2);
 	char but[255];
@@ -56,11 +55,12 @@ static char* gendoc(void* f1,void* f2,char* base)
 	sprintf(buf,"<p>特征匹配相似度%.2f<br/>"
 			"<img src=\"%ssift1.jpg\"/>"
 			"<img src=\"%ssift2.jpg\"/></p>",
-			ft,base,base);
+			ft,prefix,prefix);
 	char* rt;
 	rt=(char*)malloc(strlen(buf)+2);
 	strcpy(rt,buf);
-	return rt;
+	*/
+	return NULL;
 }
 
 

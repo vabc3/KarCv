@@ -29,6 +29,7 @@ static void ftfile_delete(const char *path);
 
 int is_dir(const char *name)
 {
+	if(!name)return 0;
 	struct stat st;
 	return (stat(name, &st) == 0 && S_ISDIR(st.st_mode));
 }

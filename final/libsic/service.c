@@ -200,30 +200,23 @@ int srv_genlist(char *imgfile,char *key,sic_item **si,int *n)
 }
 
 
-void sic_genhtml(char *imgfile,sic_item *si,int n)
+void sic_genhtml(char *imgfile,sic_item *si,int n,char *base)
 {
-	sic_log("Gen html Called");
-
-
-	void *base_f,*each_f;
-
+	sic_log("Gen html Called [%s]",base);
+	void *ef;
 	IplImage *img;
 	if(srv_imgopen(imgfile,&img)){
 		return;
 	}
-	pfeat_gen(img,&base_f);
+	pfeat_gen(img,&ef);
 
 	int i;
 	char *out;
 	char ff[STRMLEN];
-
-	char base[]="/tmp";
 	char fn[]="index.htm";
-
 	char hn[255];
 	sprintf(hn,"%s/%s",base,fn);
 	FILE* fp=fopen(hn,"w");
-
 	char bp[255];
 
 	fprintf(fp,"<h3>图像文件:%s</h3>\n",imgfile);
@@ -231,14 +224,12 @@ void sic_genhtml(char *imgfile,sic_item *si,int n)
 	for(i=0;i<n;i++){
 		fprintf(fp,"<p>%d.[%.2f%%],%s,%s</p>\n",i+1,
 				(si+i)->appo,(si+i)->description,(si+i)->imagefile);
-
+		
 		sic_log((si+i)->feat);
 		sprintf(ff,"%s/%s",dbdir,(si+i)->feat);
 		fprintf(fp,"<img src=\"%s.jpg\"/>\n",ff);
-		pfeat_load(ff,&each_f);
-
-		sprintf(bp,"%s/im%d",base,i+1);
-		pdoc_html(base_f,each_f,bp,&out);
+		sprintf(bp,"im%d",i+1);
+		pdoc_html(img,ef,ff,base,bp,&out);
 
 		fprintf(fp,"%s\n",out);free(out);
 	}

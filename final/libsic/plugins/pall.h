@@ -39,7 +39,7 @@ typedef struct sic_plugin_feat_s
 	int (*save)(void*,char*);
 	int (*load)(char*,void**);
 	float (*compare)(void*,void*);
-	char* (*gendoc)(void*,void*,char*);
+	char* (*gendoc)(IplImage*,void*,char*,char*,char*);
 }sicpfeat;
 
 
@@ -61,6 +61,6 @@ extern void pfix_init();
 extern void pfix_img(IplImage *in,IplImage **out);
 
 extern void pdoc_init();
-extern void pdoc_html(void *f1,void *f2,char* base,char** text);
+extern void pdoc_html(IplImage*,void*,char* fe,char*dir,char*pf,char** text);
 
 #endif

@@ -25,28 +25,34 @@ static int genfeature(IplImage *img,void **out);
 static int save(void *data,char *fn);
 static int load(char *fn,void **data);
 static float comp(void* feat1,void* feat2);
-static char* gendoc(void* f1,void* f2,char* base);
+static char* gendoc(IplImage* img,void* data,char* featkey,char* dir,char* prefix);
 
 sicpfeat phist={
 	2,.1,genfeature,save,load,comp,gendoc
 };
 
-static char* gendoc(void* f1,void* f2,char* base)
+static char* gendoc(IplImage* imgo,void* data,char* featkey,char* dir,char* prefix)
 {
-	sic_log("hist->gendoc base:%s",base);
+	sic_log("hist->gendoc base:%s|%s",dir,prefix);
 
 	char buf[255];
-	float ft=comp(f1,f2);
-	char but[255];
 
+	void *f2;
+
+	load(featkey,&f2);
+
+	float ft=comp(data,f2);
+	char base[255];
+	sprintf(base,"%s/%s",dir,prefix);
 	IplImage *img;
 	sic_hist* s;
-	s	= (sic_hist*)f1;
+	s	= (sic_hist*)data;
 	img=makeHistogramImage(3,s->sm);
 
 	sprintf(buf,"%shist1.jpg",base);
 	cvSaveImage(buf,img,NULL);	
 	cvReleaseImage(&img);
+
 	s	= (sic_hist*)f2;
 	img=makeHistogramImage(3,s->sm);
 	sprintf(buf,"%shist2.jpg",base);
@@ -56,7 +62,7 @@ static char* gendoc(void* f1,void* f2,char* base)
 	sprintf(buf,"<p>直方图相似度%.2f<br/>"
 			"<img src=\"%shist1.jpg\"/>"
 			"<img src=\"%shist2.jpg\"/></p>",
-			ft,base,base);
+			ft,prefix,prefix);
 	char* rt;
 	rt=(char*)malloc(strlen(buf)+2);
 	strcpy(rt,buf);

@@ -54,6 +54,7 @@ extern int sic_insert(const char *imgfile,const char *desc);	//插入单条数�
 extern int sic_autoadd(char *dir);								//自动扫描目录入库
 extern int sic_matchlist(char *imgfile,char *key,sic_item** const,
 		int topx,char *destfile)__attribute__((warn_unused_result));//返回查询结果
+extern int sic_gendoc(char *destdir,sic_item** is);
 extern void sic_debug();			//打开debug模式
 
 #ifdef __cplusplus
