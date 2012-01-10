@@ -28,7 +28,7 @@ static float comp(void* feat1,void* feat2);
 static char* gendoc(IplImage* img,void* data,char* featkey,char* dir,char* prefix);
 
 sicpfeat phist={
-	2,.1,genfeature,save,load,comp,gendoc
+	2,.25,genfeature,save,load,comp,gendoc
 };
 
 static char* gendoc(IplImage* imgo,void* data,char* featkey,char* dir,char* prefix)

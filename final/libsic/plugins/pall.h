@@ -20,7 +20,6 @@
 #define SIC_PALL_H
 #include <cv.h>
 #include <stdio.h>
-
 #define PFIX		1
 #define PFEATGEN	(1<<1)
 #define PFEATSAV	(1<<2)

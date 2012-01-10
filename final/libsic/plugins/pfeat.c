@@ -130,7 +130,7 @@ void pfeat_init()
 	sic_plugin_regproc(PFEATLOD,procload);
 	sic_plugin_regproc(PFEATCMP,proccmp);
 	sic_plugin_regitem(PFEAT,(void*)&phist);
-//	sic_plugin_regitem(PFEAT,(void*)&psift);
+	sic_plugin_regitem(PFEAT,(void*)&psift);
 	sic_plugin_regitem(PFEATGEN|PFEATSAV,(void*)&psave);
 }
 

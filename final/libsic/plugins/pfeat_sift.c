@@ -25,6 +25,12 @@
 #include "pall.h"
 #include "psift.h"
 
+
+/* the maximum number of keypoint NN candidates to check during BBF search */
+#define KDTREE_BBF_MAX_NN_CHKS 200
+
+/* threshold on squared ratio of distances between NN and 2nd NN */
+#define NN_SQ_DIST_RATIO_THR 0.49
 int intvls = SIFT_INTVLS;
 double sigma = SIFT_SIGMA;
 double contr_thr = SIFT_CONTR_THR;
@@ -40,27 +46,93 @@ static float comp(void* feat1,void* feat2);
 static char* gendoc(IplImage* img,void* data,char* featkey,char* dir,char* prefix);
 
 sicpfeat psift={
-	1,.9,genfeature,save,load,comp,gendoc
+	1,.75,genfeature,save,load,comp,gendoc
 };
 
-static char* gendoc(IplImage* img,void* data,char* featkey,char* dir,char* prefix)
+
+static IplImage* stack_imgs( IplImage* img1, IplImage* img2 )
 {
-/*	sic_log("sift->gendoc base:%s",base);
+	IplImage* stacked = cvCreateImage( cvSize( MAX(img1->width, img2->width),
+				img1->height + img2->height ),
+			IPL_DEPTH_8U, 3 );
+
+	cvZero( stacked );
+	cvSetImageROI( stacked, cvRect( 0, 0, img1->width, img1->height ) );
+	cvAdd( img1, stacked, stacked, NULL );
+	cvSetImageROI( stacked, cvRect(0, img1->height, img2->width, img2->height) );
+	cvAdd( img2, stacked, stacked, NULL );
+	cvResetImageROI( stacked );
+
+	return stacked;
+}
+
+
+static char* gendoc(IplImage* img1,void* data,char* featkey,char* dir,char* prefix)
+{
+	sic_log("sift->gendoc base:%s|%s",dir,prefix);
 	char buf[255];
-	float ft=comp(f1,f2);
-	char but[255];
 
-	IplImage *img;
+	void *f2;
+	load(featkey,&f2);
 
-	sprintf(buf,"<p>特征匹配相似度%.2f<br/>"
-			"<img src=\"%ssift1.jpg\"/>"
-			"<img src=\"%ssift2.jpg\"/></p>",
-			ft,prefix,prefix);
+	sprintf(buf,"%s.jpg",featkey);
+	IplImage *img2=cvLoadImage(buf,1);
+	IplImage *img=stack_imgs(img1,img2);
+
+	sic_sift *sf1,*sf2;
+	s_feature *feat1,*feat2;
+	int n1,n2;
+
+	sf1=(sic_sift*)data;
+	sf2=(sic_sift*)f2;
+	feat1=sf1->feat;feat2=sf2->feat;
+	n1=sf1->n;n2=sf2->n;
+	int i,k,m = 0;
+	s_feature **nbrs,*feat;
+	double d0,d1;
+	struct kd_node *kd_root;
+	CvPoint pt1,pt2;
+
+	kd_root = kdtree_build( feat2, n2 );
+	for( i = 0; i < n1; i++ ){
+		feat = feat1 + i;
+		k = kdtree_bbf_knn( kd_root, feat, 2, &nbrs, KDTREE_BBF_MAX_NN_CHKS );
+		if( k == 2 ){
+			d0 = descr_dist_sq( feat, nbrs[0] );
+			d1 = descr_dist_sq( feat, nbrs[1] );
+			if( d0 < d1 * NN_SQ_DIST_RATIO_THR ){
+				pt1 = cvPoint( cvRound( feat->x ), cvRound( feat->y ) );
+				pt2 = cvPoint( cvRound( nbrs[0]->x ), cvRound( nbrs[0]->y ) );
+				pt2.y += img1->height;
+				cvLine( img, pt1, pt2, CV_RGB(255,0,255), 1, 8, 0 );
+				m++;
+				feat1[i].fwd_match = nbrs[0];
+			}
+		}
+		free( nbrs );
+	}
+
+	kdtree_release(kd_root);
+
+
+	sprintf(buf,"%s/%ssift.jpg",dir,prefix);
+	cvSaveImage(buf,img,NULL);
+//	cvReleaseImage(&img);
+//	cvReleaseImage(&img1);
+//	cvReleaseImage(&img2);
+
+//	float ft=comp(data,f2);
+	sprintf(buf,"<p>特征匹配相似处%d<br/>"
+			"<img src=\"%ssift.jpg\"/></p>",
+			m,prefix);
+
+
+
+
 	char* rt;
 	rt=(char*)malloc(strlen(buf)+2);
 	strcpy(rt,buf);
-	*/
-	return NULL;
+	return rt;
 }
 
 
@@ -121,11 +193,6 @@ static int load(char *fn,void **data)
 }
 
 
-/* the maximum number of keypoint NN candidates to check during BBF search */
-#define KDTREE_BBF_MAX_NN_CHKS 200
-
-/* threshold on squared ratio of distances between NN and 2nd NN */
-#define NN_SQ_DIST_RATIO_THR 0.49
 
 static float comp(void *f1,void* f2)
 {	
