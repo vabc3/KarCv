@@ -19,6 +19,7 @@
 #ifndef SIC_PALL_H
 #define SIC_PALL_H
 #include <cv.h>
+#include <stdio.h>
 
 #define PFIX		1
 #define PFEATGEN	(1<<1)
@@ -61,6 +62,6 @@ extern void pfix_init();
 extern void pfix_img(IplImage *in,IplImage **out);
 
 extern void pdoc_init();
-extern void pdoc_html(IplImage*,void*,char* fe,char*dir,char*pf,char** text);
+extern void pdoc_html(IplImage*,void*,char* fe,char*dir,char*pf,FILE *fp);
 
 #endif

@@ -211,7 +211,6 @@ void sic_genhtml(char *imgfile,sic_item *si,int n,char *base)
 	pfeat_gen(img,&ef);
 
 	int i;
-	char *out;
 	char ff[STRMLEN];
 	char fn[]="index.htm";
 	char hn[255];
@@ -229,9 +228,7 @@ void sic_genhtml(char *imgfile,sic_item *si,int n,char *base)
 		sprintf(ff,"%s/%s",dbdir,(si+i)->feat);
 		fprintf(fp,"<img src=\"%s.jpg\"/>\n",ff);
 		sprintf(bp,"im%d",i+1);
-		pdoc_html(img,ef,ff,base,bp,&out);
-
-		fprintf(fp,"%s\n",out);free(out);
+		pdoc_html(img,ef,ff,base,bp,fp);
 	}
 	fclose(fp);
 }
