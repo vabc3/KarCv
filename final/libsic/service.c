@@ -131,7 +131,8 @@ int srv_insertdb(const char *imgfile,const char *desc)
 {
 	char tmp[STRMLEN];
 	sic_log("Ins %s(%s)",imgfile,desc);
-	realpath(imgfile,tmp);
+	char *N;
+	N=realpath(imgfile,tmp);
 	sic_dbitem item;
 	make_sic_dbitem(&item,-1,tmp,"",desc);
 	if(dao->save(&item)){

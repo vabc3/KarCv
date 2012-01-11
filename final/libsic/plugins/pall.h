@@ -28,6 +28,9 @@
 #define PDOC		(1<<5)
 #define PFEAT		(PFEATGEN|PFEATSAV|PFEATLOD|PFEATCMP|PDOC)
 
+#define PRSIFT		1
+#define PRHIST		1-PRSIFT
+
 extern int sic_pall_init();
 extern int sic_pall_end();
 

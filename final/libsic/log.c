@@ -59,7 +59,8 @@ void sic_process_begin(int n)
 
 	if(proc){
 		pc=n;la=0;
-		printf("Processing...(  0,%3d) ",pc);
+		fprintf(stderr,"Processing...(  0,%3d) ",pc);
+		fflush(stderr);
 	}
 }
 
@@ -69,9 +70,9 @@ void sic_process_call(int i,char *s)
 		char buf[255];
 		sprintf(buf,"\033[%dD(%%3d/%%3d) %%s",la+10);
 		la=strlen(s);
-		printf(buf,i,pc,s);
+		fprintf(stderr,buf,i,pc,s);
 		//	printf("\033[9D(%3d/%3d)%s",i,pc,s);
-		fflush(stdout);
+		fflush(stderr);
 	}
 }
 
@@ -80,7 +81,7 @@ void sic_process_end()
 	char buf[255];
 	if(proc){
 		sprintf(buf,"\033[%dDDone!        \n",la+10);
-		printf(buf,"");
+		fprintf(stderr,buf,"");
 	}
 }
 

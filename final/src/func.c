@@ -21,6 +21,7 @@
 #include <sic.h>
 #include "arg.h"
 #include "func.h"
+#define DEFAULT_TOPX 5
 
 static void debug();
 static void version();
@@ -163,9 +164,9 @@ void match()
 		return;
 	}
 	if(!op.key){
-		n=sic_matchlist(op.path,"",&si,10,op.outp);
+		n=sic_matchlist(op.path,"",&si,DEFAULT_TOPX,op.outp);
 	}else
-		n=sic_matchlist(op.path,op.key,&si,10,op.outp);
+		n=sic_matchlist(op.path,op.key,&si,DEFAULT_TOPX,op.outp);
 
 	if(n<0){
 		printf("Image error!\n");

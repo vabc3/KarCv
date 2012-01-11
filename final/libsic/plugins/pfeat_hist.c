@@ -28,7 +28,7 @@ static float comp(void* feat1,void* feat2);
 static char* gendoc(IplImage* img,void* data,char* featkey,char* dir,char* prefix);
 
 sicpfeat phist={
-	2,.25,genfeature,save,load,comp,gendoc
+	2,PRHIST,genfeature,save,load,comp,gendoc
 };
 
 static char* gendoc(IplImage* imgo,void* data,char* featkey,char* dir,char* prefix)
@@ -123,10 +123,10 @@ static int load(char *fn,void **data)
 	sprintf(buf,"%s.hist",fn);
 
 	FILE* fp    = fopen(buf,"r");
-	int i,j;
+	int i,j,t;
 	for(i=0;i<3;i++)
 		for(j=0;j<DEPS;j++)
-			fscanf(fp,"%f\t",&(s->sm[i][j]));
+			t=fscanf(fp,"%f\t",&(s->sm[i][j]));
 
 	fclose(fp);
 
