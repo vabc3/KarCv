@@ -129,15 +129,16 @@ int srv_general_update()
 
 int srv_insertdb(const char *imgfile,const char *desc)
 {
-	char tmp[STRMLEN];
 	sic_log("Ins %s(%s)",imgfile,desc);
-	char *N;
-	N=realpath(imgfile,tmp);
+	char *tmp;
+	tmp=realpath(imgfile,NULL);
+	
 	sic_dbitem item;
 	make_sic_dbitem(&item,-1,tmp,"",desc);
 	if(dao->save(&item)){
 		return -1;
 	}
+	free(tmp);
 	return 0;
 
 }
@@ -230,6 +231,41 @@ void sic_genhtml(char *imgfile,sic_item *si,int n,char *base)
 		fprintf(fp,"<img src=\"%s.jpg\"/>\n",ff);
 		sprintf(bp,"im%d",i+1);
 		pdoc_html(img,ef,ff,base,bp,fp);
+	}
+	fclose(fp);
+}
+
+void sic_gentex(char *imgfile,sic_item *si,int n,char *base)
+{
+	sic_log("Gen tex Called [%s]",base);
+	void *ef;
+	IplImage *img;
+	if(srv_imgopen(imgfile,&img)){
+		return;
+	}
+	pfeat_gen(img,&ef);
+
+	int i;
+	char ff[STRMLEN];
+	char fn[]="index.tex";
+	char hn[255];
+	sprintf(hn,"%s/%s",base,fn);
+	FILE* fp=fopen(hn,"a+");
+	char bp[255];
+
+	fprintf(fp,"\\subsection{图像文件:%s}\n",imgfile);
+	fprintf(fp,"\\includegraphics[width=15cm,angle=0]{%s}\n\n",imgfile);
+	for(i=0;i<n;i++){
+		fprintf(fp,"\\paragraph{%d}\n",i+1);
+		fprintf(fp,"[%.2f\\%%],%s,%s\n\n",
+				(si+i)->appo,(si+i)->description,(si+i)->imagefile);
+		
+		sic_log((si+i)->feat);
+		sprintf(ff,"%s/%s",dbdir,(si+i)->feat);
+//		fprintf(fp,"\\centering\\includegraphics[width=15cm,angle=0]{%s.jpg}\n\n",ff);
+		sprintf(bp,"im%d",i+1);
+		pdoc_tex(img,ef,ff,base,bp,fp);
+		if(i%2==0)fprintf(fp,"\\clearpage\n");
 	}
 	fclose(fp);
 }

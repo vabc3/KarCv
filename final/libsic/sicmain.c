@@ -97,7 +97,7 @@ int sic_matchlist(char *imgfile,char *key,sic_item **si,int topx,char *destfile)
 	}
 
 	if(is_dir(destfile))
-		sic_genhtml(imgfile,*si,n,destfile);
+		sic_gentex(imgfile,*si,n,destfile);
 
 	return n;
 }

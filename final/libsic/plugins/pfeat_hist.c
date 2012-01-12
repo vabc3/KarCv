@@ -25,13 +25,30 @@ static int genfeature(IplImage *img,void **out);
 static int save(void *data,char *fn);
 static int load(char *fn,void **data);
 static float comp(void* feat1,void* feat2);
-static char* gendoc(IplImage* img,void* data,char* featkey,char* dir,char* prefix);
+static void* gendoc(IplImage* img,void* data,char* featkey,char* dir,char* prefix);
+
+static IplImage* stack_imgs( IplImage* img1, IplImage* img2 )
+{
+	IplImage* stacked = cvCreateImage( cvSize( MAX(img1->width, img2->width),
+				img1->height + img2->height ),
+			IPL_DEPTH_8U, 3 );
+
+	cvZero( stacked );
+	cvSetImageROI( stacked, cvRect( 0, 0, img1->width, img1->height ) );
+	cvAdd( img1, stacked, stacked, NULL );
+	cvSetImageROI( stacked, cvRect(0, img1->height, img2->width, img2->height) );
+	cvAdd( img2, stacked, stacked, NULL );
+	cvResetImageROI( stacked );
+
+	return stacked;
+}
+
 
 sicpfeat phist={
 	2,PRHIST,genfeature,save,load,comp,gendoc
 };
 
-static char* gendoc(IplImage* imgo,void* data,char* featkey,char* dir,char* prefix)
+static void* gendoc(IplImage* imgo,void* data,char* featkey,char* dir,char* prefix)
 {
 	sic_log("hist->gendoc base:%s|%s",dir,prefix);
 
@@ -44,28 +61,42 @@ static char* gendoc(IplImage* imgo,void* data,char* featkey,char* dir,char* pref
 	float ft=comp(data,f2);
 	char base[255];
 	sprintf(base,"%s/%s",dir,prefix);
-	IplImage *img;
+	IplImage *img1,*img2;
 	sic_hist* s;
+	
 	s	= (sic_hist*)data;
-	img=makeHistogramImage(3,s->sm);
-
-	sprintf(buf,"%shist1.jpg",base);
-	cvSaveImage(buf,img,NULL);	
-	cvReleaseImage(&img);
+	img1=makeHistogramImage(3,s->sm);
+//	sprintf(buf,"%shist1.jpg",base);
+//	cvSaveImage(buf,img,NULL);	
+//	cvReleaseImage(&img);
 
 	s	= (sic_hist*)f2;
-	img=makeHistogramImage(3,s->sm);
+	img2=makeHistogramImage(3,s->sm);
+
+
+	IplImage *img=stack_imgs(img1,img2);
+
 	sprintf(buf,"%shist2.jpg",base);
 	cvSaveImage(buf,img,NULL);	
 	cvReleaseImage(&img);
 
-	sprintf(buf,"<p>直方图相似度%.2f<br/>"
-			"<img src=\"%shist1.jpg\"/>"
-			"<img src=\"%shist2.jpg\"/></p>",
-			ft,prefix,prefix);
-	char* rt;
-	rt=(char*)malloc(strlen(buf)+2);
-	strcpy(rt,buf);
+
+		
+
+
+
+	char* rt1,*rt2;
+	sprintf(buf,"直方图相似度%.2f",ft);
+	rt1=(char*)malloc(strlen(buf)+2);
+	strcpy(rt1,buf);
+
+	sprintf(buf,"%shist2.jpg",base);
+	rt2=(char*)malloc(strlen(buf)+2);
+	strcpy(rt2,buf);
+	void **rt=(void**)malloc(2*sizeof(void*));
+	*(rt)=rt1;
+	*(rt+1)=rt2;
+
 	return rt;
 }
 
@@ -86,9 +117,9 @@ static int genfeature(IplImage *img,void **out)
 	*out=(void*)s;
 
 
-//	 IplImage* ig=makeHistogramImage(3,s->sm);
-//   show("ig",ig);
-//
+	//	 IplImage* ig=makeHistogramImage(3,s->sm);
+	//   show("ig",ig);
+	//
 
 
 
@@ -99,8 +130,8 @@ static int save(void *data,char *fn)
 	sic_log("hist->save");
 
 	char buf[512];
-    sprintf(buf,"%s.hist",fn);
-	
+	sprintf(buf,"%s.hist",fn);
+
 	sic_hist *s	= (sic_hist*)data;
 
 	FILE* fp	= fopen(buf,"w");
@@ -130,8 +161,8 @@ static int load(char *fn,void **data)
 
 	fclose(fp);
 
-//	ig=makeHistogramImage(3,s->sm);
-//	show("ig",ig);
+	//	ig=makeHistogramImage(3,s->sm);
+	//	show("ig",ig);
 	*data=s;
 	return 0;
 }
@@ -153,7 +184,7 @@ static float comp(void* feat1,void* feat2)
 			cal[i]+=lag;
 		}
 		cal[i]/=(DEPS);
-//		sic_log("Each cal %f",cal[i]);
+		//		sic_log("Each cal %f",cal[i]);
 	}
 	res=powf(cal[0]*cal[1]*cal[2],1.0/3);
 

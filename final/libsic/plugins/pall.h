@@ -28,7 +28,7 @@
 #define PDOC		(1<<5)
 #define PFEAT		(PFEATGEN|PFEATSAV|PFEATLOD|PFEATCMP|PDOC)
 
-#define PRSIFT		1
+#define PRSIFT		.77
 #define PRHIST		1-PRSIFT
 
 extern int sic_pall_init();
@@ -42,7 +42,7 @@ typedef struct sic_plugin_feat_s
 	int (*save)(void*,char*);
 	int (*load)(char*,void**);
 	float (*compare)(void*,void*);
-	char* (*gendoc)(IplImage*,void*,char*,char*,char*);
+	void* (*gendoc)(IplImage*,void*,char*,char*,char*);
 }sicpfeat;
 
 
@@ -65,5 +65,6 @@ extern void pfix_img(IplImage *in,IplImage **out);
 
 extern void pdoc_init();
 extern void pdoc_html(IplImage*,void*,char* fe,char*dir,char*pf,FILE *fp);
+extern void pdoc_tex(IplImage*,void*,char* fe,char*dir,char*pf,FILE *fp);
 
 #endif
